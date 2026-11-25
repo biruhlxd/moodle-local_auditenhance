@@ -103,5 +103,26 @@ final class hook_callbacks {
         $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('forum', ['intro']));
         $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('quiz', ['intro']));
         $hook->add_content_source(new \local_auditenhance\local\content\source\question_text());
+
+        $hook->add_area(new area('pluginrisk', 'local_auditenhance', 20, 50));
+        $hook->add_checks([
+            \local_auditenhance\check\pluginrisk\privacymissing::class,
+            \local_auditenhance\check\pluginrisk\privacynull::class,
+            \local_auditenhance\check\pluginrisk\privacymetadata::class,
+            \local_auditenhance\check\pluginrisk\versionsupport::class,
+            \local_auditenhance\check\pluginrisk\deprecatedapis::class,
+            \local_auditenhance\check\pluginrisk\missingdeps::class,
+            \local_auditenhance\check\pluginrisk\unsafefunctions::class,
+            \local_auditenhance\check\pluginrisk\rawinput::class,
+            \local_auditenhance\check\pluginrisk\sqlconcat::class,
+            \local_auditenhance\check\pluginrisk\missingversion::class,
+            \local_auditenhance\check\pluginrisk\licenceheader::class,
+            \local_auditenhance\check\pluginrisk\langstrings::class,
+            \local_auditenhance\check\pluginrisk\riskycapsdefault::class,
+            \local_auditenhance\check\pluginrisk\riskyoverrides::class,
+            \local_auditenhance\check\pluginrisk\roleescalation::class,
+            \local_auditenhance\check\pluginrisk\correlation::class,
+        ]);
+        $hook->add_scanner(new \local_auditenhance\local\scanner\plugin_scanner());
     }
 }
