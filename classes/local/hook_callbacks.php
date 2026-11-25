@@ -78,5 +78,30 @@ final class hook_callbacks {
             \local_auditenhance\check\hygiene\unusedplugins::class,
             \local_auditenhance\check\hygiene\disabledplugins::class,
         ]);
+
+        $hook->add_area(new area('accessibility', 'local_auditenhance', 20, 40));
+        $hook->add_checks([
+            \local_auditenhance\check\accessibility\imagealt::class,
+            \local_auditenhance\check\accessibility\headings::class,
+            \local_auditenhance\check\accessibility\linktext::class,
+            \local_auditenhance\check\accessibility\tables::class,
+            \local_auditenhance\check\accessibility\contrast::class,
+            \local_auditenhance\check\accessibility\media::class,
+            \local_auditenhance\check\accessibility\documents::class,
+            \local_auditenhance\check\accessibility\htmllang::class,
+            \local_auditenhance\check\accessibility\statement::class,
+            \local_auditenhance\check\accessibility\themecontrast::class,
+        ]);
+        $hook->add_scanner(new \local_auditenhance\local\scanner\brickfield_scanner());
+        $hook->add_scanner(new \local_auditenhance\local\scanner\content_scanner());
+        $hook->add_content_source(new \local_auditenhance\local\content\source\course_summary());
+        $hook->add_content_source(new \local_auditenhance\local\content\source\course_section());
+        $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('page', ['intro', 'content']));
+        $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('label', ['intro']));
+        $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('book', ['intro']));
+        $hook->add_content_source(new \local_auditenhance\local\content\source\book_chapter());
+        $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('forum', ['intro']));
+        $hook->add_content_source(new \local_auditenhance\local\content\source\module_field('quiz', ['intro']));
+        $hook->add_content_source(new \local_auditenhance\local\content\source\question_text());
     }
 }

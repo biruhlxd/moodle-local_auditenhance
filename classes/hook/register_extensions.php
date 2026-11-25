@@ -18,13 +18,14 @@ namespace local_auditenhance\hook;
 
 use local_auditenhance\check\base;
 use local_auditenhance\local\area;
+use local_auditenhance\local\content\content_source;
 use local_auditenhance\local\export_format;
 use local_auditenhance\local\finding_action;
 use local_auditenhance\local\scanner\scanner;
 use local_auditenhance\local\screen;
 
 /**
- * Collects audit areas, checks, scanners, screens, export formats and finding actions.
+ * Collects audit areas, checks, scanners, content sources, screens, export formats and finding actions.
  *
  * Plugins add a callback for this hook in their db/hooks.php and call the add_ methods.
  *
@@ -55,6 +56,9 @@ final class register_extensions {
 
     /** @var finding_action[] Finding actions. */
     private array $findingactions = [];
+
+    /** @var content_source[] Content sources by id. */
+    private array $contentsources = [];
 
     /**
      * Add an area. An area with the same id replaces the earlier one.
@@ -151,6 +155,17 @@ final class register_extensions {
     }
 
     /**
+     * Add a source of HTML content for the content scanner.
+     *
+     * @param content_source $source
+     * @return self
+     */
+    public function add_content_source(content_source $source): self {
+        $this->contentsources[$source->get_id()] = $source;
+        return $this;
+    }
+
+    /**
      * Areas.
      *
      * @return area[]
@@ -202,5 +217,14 @@ final class register_extensions {
      */
     public function get_finding_actions(): array {
         return $this->findingactions;
+    }
+
+    /**
+     * Content sources.
+     *
+     * @return content_source[]
+     */
+    public function get_content_sources(): array {
+        return $this->contentsources;
     }
 }

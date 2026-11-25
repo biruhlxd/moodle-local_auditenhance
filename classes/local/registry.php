@@ -49,6 +49,9 @@ final class registry {
     /** @var finding_action[] Finding actions. */
     private array $findingactions;
 
+    /** @var content\content_source[] Content sources by id. */
+    private array $contentsources;
+
     /**
      * Build the registry from a filled hook.
      *
@@ -87,6 +90,7 @@ final class registry {
         $this->screens = $screens;
         $this->exportformats = $hook->get_export_formats();
         $this->findingactions = $hook->get_finding_actions();
+        $this->contentsources = $hook->get_content_sources();
     }
 
     /**
@@ -231,5 +235,14 @@ final class registry {
      */
     public function get_finding_actions(): array {
         return $this->findingactions;
+    }
+
+    /**
+     * Content sources available on this site.
+     *
+     * @return content\content_source[]
+     */
+    public function get_content_sources(): array {
+        return array_filter($this->contentsources, fn(content\content_source $s) => $s->is_available());
     }
 }
