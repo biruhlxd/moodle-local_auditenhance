@@ -30,7 +30,20 @@ final class settings {
      * @return array<string, int>
      */
     public static function get_thresholds(): array {
-        return [];
+        return [
+            // Security and configuration.
+            'cronlateminutes' => 10,
+            'minpasswordlength' => 8,
+            'maxadmins' => 3,
+            'adminidledays' => 90,
+            // Performance and storage.
+            'largesiteusers' => 2000,
+            'largecoursemb' => 2048,
+            'largefilemb' => 500,
+            'backupagedays' => 365,
+            'slowtaskminutes' => 10,
+            'adhocbacklog' => 500,
+        ];
     }
 
     /**
@@ -39,7 +52,19 @@ final class settings {
      * @return \admin_setting[]
      */
     public static function get_extra_settings(): array {
-        return [];
+        return [
+            new \admin_setting_configselect(
+                'local_auditenhance/sitevisibility',
+                new \lang_string('setting_sitevisibility', 'local_auditenhance'),
+                new \lang_string('setting_sitevisibility_desc', 'local_auditenhance'),
+                'auto',
+                [
+                    'auto' => new \lang_string('sitevisibility_auto', 'local_auditenhance'),
+                    'private' => new \lang_string('sitevisibility_private', 'local_auditenhance'),
+                    'public' => new \lang_string('sitevisibility_public', 'local_auditenhance'),
+                ]
+            ),
+        ];
     }
 
     /**
