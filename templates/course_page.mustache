@@ -1,0 +1,84 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_auditenhance/course_page
+
+    Results of one area for one course: counts per check and sample items.
+
+    Context variables required for this template:
+    * hasrun - Whether an audit has run
+    * rundate - Date of the run
+    * areaname - Name of the area
+    * total - Number of items
+    * noissues - Whether nothing was found
+    * checks - List of checks with name, count, why, fix, items and more
+
+    Example context (json):
+    {
+        "hasrun": true,
+        "rundate": "26 November 2026, 10:00",
+        "areaname": "Accessibility",
+        "total": 3,
+        "noissues": false,
+        "checks": [
+            {
+                "name": "Image alternative text",
+                "count": 3,
+                "why": "Screen reader users cannot see images.",
+                "fix": "Add a short description.",
+                "more": 1,
+                "items": [
+                    {"label": "Page: Week 1: Image without alternative text", "url": "#", "snippet": "<img src=\"a.png\">",
+                     "severity": "Medium", "severityclass": "medium"}
+                ]
+            }
+        ]
+    }
+}}
+<div class="local-auditenhance-course">
+    {{^hasrun}}
+        <div class="alert alert-info">{{#str}} noresultsyet, local_auditenhance {{/str}}</div>
+    {{/hasrun}}
+    {{#hasrun}}
+        <p class="text-muted">{{#str}} lastrun, local_auditenhance, {{rundate}} {{/str}}</p>
+        {{#noissues}}
+            <div class="alert alert-success">{{#str}} courseclean, local_auditenhance, {{areaname}} {{/str}}</div>
+        {{/noissues}}
+        {{^noissues}}
+            <p>{{#str}} coursetotal, local_auditenhance, {{total}} {{/str}}</p>
+            {{#checks}}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">{{name}} <span class="badge bg-secondary badge-secondary">{{count}}</span></h3>
+                        {{#why}}<p class="mb-1">{{why}}</p>{{/why}}
+                        {{#fix}}<p class="mb-2"><strong>{{#str}} howtofix, local_auditenhance {{/str}}</strong> {{fix}}</p>{{/fix}}
+                        <ul class="list-unstyled mb-0">
+                            {{#items}}
+                                <li class="mb-1">
+                                    <span class="badge local-auditenhance-severity-{{severityclass}}">{{severity}}</span>
+                                    {{#url}}<a href="{{url}}">{{label}}</a>{{/url}}{{^url}}{{label}}{{/url}}
+                                    {{#snippet}}<br><code class="small text-break">{{snippet}}</code>{{/snippet}}
+                                </li>
+                            {{/items}}
+                        </ul>
+                        {{#more}}<p class="small text-muted mt-2 mb-0">{{#str}} moreitems, local_auditenhance, {{more}} {{/str}}</p>{{/more}}
+                    </div>
+                </div>
+            {{/checks}}
+        {{/noissues}}
+    {{/hasrun}}
+</div>

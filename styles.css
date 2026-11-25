@@ -1,0 +1,24 @@
+.local-auditenhance-severity-critical {
+    background-color: #a3001b;
+    color: #fff;
+}
+
+.local-auditenhance-severity-high {
+    background-color: #c2410c;
+    color: #fff;
+}
+
+.local-auditenhance-severity-medium {
+    background-color: #8a5a00;
+    color: #fff;
+}
+
+.local-auditenhance-severity-low {
+    background-color: #1d5f8a;
+    color: #fff;
+}
+
+.local-auditenhance-severity-info {
+    background-color: #555;
+    color: #fff;
+}

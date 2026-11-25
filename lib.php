@@ -48,3 +48,24 @@ function local_auditenhance_performance_checks(): array {
 function local_auditenhance_status_checks(): array {
     return \local_auditenhance\local\registry::instance()->get_core_report_checks('status');
 }
+
+/**
+ * Add the accessibility audit to the course navigation for users who may see it.
+ *
+ * @param navigation_node $navigation
+ * @param stdClass $course
+ * @param context $context
+ */
+function local_auditenhance_extend_navigation_course(navigation_node $navigation, stdClass $course, context $context): void {
+    if ($course->id == SITEID || !has_capability('local/auditenhance:viewcourse', $context)) {
+        return;
+    }
+    $navigation->add(
+        get_string('courseaccessibility', 'local_auditenhance'),
+        new moodle_url('/local/auditenhance/course.php', ['id' => $course->id]),
+        navigation_node::TYPE_SETTING,
+        null,
+        'local_auditenhance_course',
+        new pix_icon('i/report', '')
+    );
+}
