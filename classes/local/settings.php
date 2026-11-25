@@ -70,6 +70,39 @@ final class settings {
                     'public' => new \lang_string('sitevisibility_public', 'local_auditenhance'),
                 ]
             ),
+            new \admin_setting_configtext(
+                'local_auditenhance/accessibilitystatementurl',
+                new \lang_string('setting_accessibilitystatementurl', 'local_auditenhance'),
+                new \lang_string('setting_accessibilitystatementurl_desc', 'local_auditenhance'),
+                '',
+                PARAM_URL
+            ),
+            new \admin_setting_configcheckbox(
+                'local_auditenhance/includecore',
+                new \lang_string('setting_includecore', 'local_auditenhance'),
+                new \lang_string('setting_includecore_desc', 'local_auditenhance'),
+                0
+            ),
+            new \admin_setting_configtext(
+                'local_auditenhance/excludeplugins',
+                new \lang_string('setting_excludeplugins', 'local_auditenhance'),
+                new \lang_string('setting_excludeplugins_desc', 'local_auditenhance'),
+                '',
+                PARAM_TEXT
+            ),
+            new \admin_setting_configcheckbox(
+                'local_auditenhance/scanoninstall',
+                new \lang_string('setting_scanoninstall', 'local_auditenhance'),
+                new \lang_string('setting_scanoninstall_desc', 'local_auditenhance'),
+                0
+            ),
+            new \admin_setting_configtext(
+                'local_auditenhance/pluginbatchsize',
+                new \lang_string('setting_pluginbatchsize', 'local_auditenhance'),
+                new \lang_string('setting_pluginbatchsize_desc', 'local_auditenhance'),
+                10,
+                PARAM_INT
+            ),
         ];
     }
 
