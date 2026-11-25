@@ -48,6 +48,15 @@ abstract class content_check_base extends base implements brickfield_mapped, con
     }
 
     /**
+     * Link to the issue counts per course.
+     *
+     * @return \moodle_url|null
+     */
+    public function get_fix_url(): ?\moodle_url {
+        return new \moodle_url('/local/auditenhance/courses.php');
+    }
+
+    /**
      * Build the finding from the items found by the scan.
      *
      * @param run_context $context

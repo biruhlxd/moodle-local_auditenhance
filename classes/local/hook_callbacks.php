@@ -80,6 +80,13 @@ final class hook_callbacks {
         ]);
 
         $hook->add_area(new area('accessibility', 'local_auditenhance', 20, 40));
+        $hook->add_screen(new screen(
+            'courses',
+            'local_auditenhance',
+            new \moodle_url('/local/auditenhance/courses.php'),
+            'screen_courses',
+            60
+        ));
         $hook->add_checks([
             \local_auditenhance\check\accessibility\imagealt::class,
             \local_auditenhance\check\accessibility\headings::class,
@@ -124,5 +131,21 @@ final class hook_callbacks {
             \local_auditenhance\check\pluginrisk\correlation::class,
         ]);
         $hook->add_scanner(new \local_auditenhance\local\scanner\plugin_scanner());
+        $hook->add_screen(new screen(
+            'plugins',
+            'local_auditenhance',
+            new \moodle_url('/local/auditenhance/plugins.php'),
+            'screen_plugins',
+            70
+        ));
+
+        $hook->add_screen(new screen(
+            'mutes',
+            'local_auditenhance',
+            new \moodle_url('/local/auditenhance/mutes.php'),
+            'screen_mutes',
+            90
+        ));
+        $hook->add_finding_action(new \local_auditenhance\output\mute_action());
     }
 }
