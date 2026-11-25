@@ -43,6 +43,12 @@ final class settings {
             'backupagedays' => 365,
             'slowtaskminutes' => 10,
             'adhocbacklog' => 500,
+            // Site hygiene.
+            'neverloggedindays' => 30,
+            'inactivemonths' => 12,
+            'newcoursedays' => 30,
+            'courseinactivemonths' => 12,
+            'courseendgracedays' => 30,
         ];
     }
 
