@@ -63,5 +63,20 @@ final class hook_callbacks {
             \local_auditenhance\check\performance\slowtasks::class,
             \local_auditenhance\check\performance\adhocbacklog::class,
         ]);
+
+        $hook->add_area(new area('hygiene', 'local_auditenhance', 15, 30));
+        $hook->add_checks([
+            \local_auditenhance\check\hygiene\neverloggedin::class,
+            \local_auditenhance\check\hygiene\inactiveusers::class,
+            \local_auditenhance\check\hygiene\suspendedenrolled::class,
+            \local_auditenhance\check\hygiene\duplicateemails::class,
+            \local_auditenhance\check\hygiene\emptycourses::class,
+            \local_auditenhance\check\hygiene\noteacher::class,
+            \local_auditenhance\check\hygiene\courseinactive::class,
+            \local_auditenhance\check\hygiene\endedvisible::class,
+            \local_auditenhance\check\hygiene\completionoff::class,
+            \local_auditenhance\check\hygiene\unusedplugins::class,
+            \local_auditenhance\check\hygiene\disabledplugins::class,
+        ]);
     }
 }
