@@ -1,0 +1,87 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_auditenhance/overview_page
+
+    Overview: overall score, area scores, top problems and run status.
+
+    Example context (json):
+    {
+        "hasoverall": true, "overall": 72, "band": "fair", "canrun": true, "runurl": "#", "sesskey": "x",
+        "lastrun": "26 November 2026", "lastrunscore": 70, "mutedcount": 1, "mutesurl": "#",
+        "active": {"progress": 40, "status": "Running", "queued": false},
+        "areas": [{"name": "Security", "description": "", "url": "#", "hasscore": true, "score": 60, "band": "fair",
+                   "problems": 3, "critical": 1, "high": 1, "weight": 30}],
+        "hastop": false, "top": []
+    }
+}}
+<div class="local-auditenhance-overview">
+    <div class="d-flex flex-wrap align-items-center mb-4">
+        <div class="mr-4 me-4 text-center">
+            <div class="local-auditenhance-overall">
+                {{#hasoverall}}<span class="local-auditenhance-score local-auditenhance-score-lg local-auditenhance-band-{{band}}">{{overall}}</span>{{/hasoverall}}
+                {{^hasoverall}}<span class="local-auditenhance-score local-auditenhance-score-lg local-auditenhance-band-none">–</span>{{/hasoverall}}
+            </div>
+            <div class="small text-muted">{{#str}} overallscore, local_auditenhance {{/str}}</div>
+        </div>
+        <div>
+            {{#lastrun}}<p class="mb-1">{{#str}} lastrunat, local_auditenhance, {{lastrun}} {{/str}}</p>{{/lastrun}}
+            {{^lastrun}}<p class="mb-1">{{#str}} norunyet, local_auditenhance {{/str}}</p>{{/lastrun}}
+            {{#active}}
+                <div class="mb-2" role="status">
+                    <div class="small">{{status}} · {{progress}}%</div>
+                    <div class="progress" style="height: 0.75rem; max-width: 20rem;">
+                        <div class="progress-bar" role="progressbar" style="width: {{progress}}%" aria-valuenow="{{progress}}"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{#queued}}<div class="small text-muted">{{#str}} queuedhelp, local_auditenhance {{/str}}</div>{{/queued}}
+                </div>
+            {{/active}}
+            {{#canrun}}{{^active}}
+                <form method="post" action="{{runurl}}" class="d-inline">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <input type="hidden" name="run" value="1">
+                    <button type="submit" class="btn btn-primary">{{#str}} runaudit, local_auditenhance {{/str}}</button>
+                </form>
+            {{/active}}{{/canrun}}
+            {{#mutedcount}}<p class="small mt-2 mb-0"><a href="{{mutesurl}}">{{#str}} mutedchecks, local_auditenhance, {{mutedcount}} {{/str}}</a></p>{{/mutedcount}}
+        </div>
+    </div>
+
+    <h3 class="h5">{{#str}} areascores, local_auditenhance {{/str}}</h3>
+    <div class="local-auditenhance-areas mb-4">
+        {{#areas}}
+            <a class="card local-auditenhance-area text-decoration-none" href="{{url}}">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        {{> local_auditenhance/score }}
+                        <div class="ml-3 ms-3">
+                            <div class="font-weight-bold fw-bold">{{name}}</div>
+                            <div class="small text-muted">{{#str}} problemscount, local_auditenhance, {{problems}} {{/str}}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {{/areas}}
+    </div>
+
+    <h3 class="h5">{{#str}} topproblems, local_auditenhance {{/str}}</h3>
+    {{#hastop}}
+        {{#top}}{{> local_auditenhance/finding }}{{/top}}
+    {{/hastop}}
+    {{^hastop}}<div class="alert alert-success">{{#str}} noproblems, local_auditenhance {{/str}}</div>{{/hastop}}
+</div>
