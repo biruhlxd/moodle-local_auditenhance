@@ -1,0 +1,67 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_auditenhance/area_page
+
+    Area page: findings grouped by severity, then passed, not applicable and muted checks.
+
+    Example context (json):
+    {
+        "name": "Security", "description": "Settings", "hasscore": true, "score": 60, "band": "fair",
+        "canrun": true, "runurl": "#", "sesskey": "x", "active": false, "hasexports": false, "exports": [],
+        "hasproblems": false, "groups": [], "haspassed": false, "passed": [], "hasskipped": false, "skipped": [],
+        "hasmuted": false, "muted": []
+    }
+}}
+<div class="local-auditenhance-areapage">
+    <div class="d-flex align-items-center mb-3">
+        {{> local_auditenhance/score }}
+        <div class="ml-3 ms-3">
+            {{#description}}<p class="mb-1">{{description}}</p>{{/description}}
+            {{#canrun}}
+                {{^active}}
+                <form method="post" action="{{runurl}}" class="d-inline">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <input type="hidden" name="run" value="1">
+                    <button type="submit" class="btn btn-secondary btn-sm">{{#str}} runarea, local_auditenhance, {{name}} {{/str}}</button>
+                </form>
+                {{/active}}
+                {{#active}}<span class="small text-muted">{{#str}} runinprogress, local_auditenhance {{/str}}</span>{{/active}}
+            {{/canrun}}
+        </div>
+    </div>
+    {{> local_auditenhance/exports }}
+    {{^hasproblems}}<div class="alert alert-success">{{#str}} noproblems, local_auditenhance {{/str}}</div>{{/hasproblems}}
+    {{#groups}}
+        <h3 class="h5 mt-3"><span class="badge local-auditenhance-severity-{{key}}">{{name}}</span></h3>
+        {{#findings}}{{> local_auditenhance/finding }}{{/findings}}
+    {{/groups}}
+    {{#hasskipped}}
+        <h3 class="h5 mt-4">{{#str}} notapplicable, local_auditenhance {{/str}}</h3>
+        {{#skipped}}{{> local_auditenhance/finding }}{{/skipped}}
+    {{/hasskipped}}
+    {{#hasmuted}}
+        <h3 class="h5 mt-4">{{#str}} muted, local_auditenhance {{/str}}</h3>
+        {{#muted}}{{> local_auditenhance/finding }}{{/muted}}
+    {{/hasmuted}}
+    {{#haspassed}}
+        <details class="mt-4">
+            <summary class="h5">{{#str}} passedchecks, local_auditenhance {{/str}}</summary>
+            {{#passed}}{{> local_auditenhance/finding }}{{/passed}}
+        </details>
+    {{/haspassed}}
+</div>

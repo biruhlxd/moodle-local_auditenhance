@@ -22,3 +22,63 @@
     background-color: #555;
     color: #fff;
 }
+
+.local-auditenhance-status-pass {
+    background-color: #1e7e34;
+    color: #fff;
+}
+
+.local-auditenhance-status-skip,
+.local-auditenhance-status-none {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.local-auditenhance-status-error {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.local-auditenhance-score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.local-auditenhance-score-lg {
+    min-width: 6rem;
+    height: 6rem;
+    font-size: 2.2rem;
+}
+
+.local-auditenhance-band-good {
+    background-color: #1e7e34;
+}
+
+.local-auditenhance-band-fair {
+    background-color: #8a5a00;
+}
+
+.local-auditenhance-band-poor {
+    background-color: #a3001b;
+}
+
+.local-auditenhance-band-none {
+    background-color: #6c757d;
+}
+
+.local-auditenhance-areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+}
+
+.local-auditenhance-area {
+    color: inherit;
+}

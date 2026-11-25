@@ -1,0 +1,60 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_auditenhance/courses_page
+
+    Issue counts per course.
+
+    Example context (json):
+    {
+        "hasrun": true, "rundate": "26 November 2026", "total": 1, "hascourses": true, "pagingbar": "",
+        "hasexports": false, "exports": [],
+        "courses": [{"name": "Biology", "shortname": "BIO", "url": "#", "detailurl": "#", "items": 4,
+                     "checks": [{"name": "Image alternative text", "count": 4}]}]
+    }
+}}
+<div class="local-auditenhance-courses">
+    {{^hasrun}}<div class="alert alert-info">{{#str}} noresultsyet, local_auditenhance {{/str}}</div>{{/hasrun}}
+    {{#hasrun}}
+        <p class="text-muted">{{#str}} lastrun, local_auditenhance, {{rundate}} {{/str}}</p>
+        {{> local_auditenhance/exports }}
+        {{^hascourses}}<div class="alert alert-success">{{#str}} nocoursesissues, local_auditenhance {{/str}}</div>{{/hascourses}}
+        {{#hascourses}}
+            <table class="table table-striped generaltable">
+                <thead>
+                    <tr>
+                        <th scope="col">{{#str}} course {{/str}}</th>
+                        <th scope="col">{{#str}} issues, local_auditenhance {{/str}}</th>
+                        <th scope="col">{{#str}} bycheck, local_auditenhance {{/str}}</th>
+                        <th scope="col"><span class="sr-only visually-hidden">{{#str}} details, local_auditenhance {{/str}}</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#courses}}
+                        <tr>
+                            <td><a href="{{url}}">{{name}}</a> <small class="text-muted">{{shortname}}</small></td>
+                            <td>{{items}}</td>
+                            <td><ul class="list-unstyled mb-0 small">{{#checks}}<li>{{name}}: {{count}}</li>{{/checks}}</ul></td>
+                            <td><a href="{{detailurl}}">{{#str}} viewsample, local_auditenhance {{/str}}</a></td>
+                        </tr>
+                    {{/courses}}
+                </tbody>
+            </table>
+            {{{pagingbar}}}
+        {{/hascourses}}
+    {{/hasrun}}
+</div>

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Audit overview.
+ * Audit overview: overall score, area scores and the top problems.
  *
  * @package    local_auditenhance
  * @copyright  2026 Biruh Alemnew
@@ -23,28 +23,28 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require_once($CFG->libdir . '/adminlib.php');
+
+require_login(null, false);
 
 use local_auditenhance\local\run_manager;
+use local_auditenhance\output\page;
 
-admin_externalpage_setup('local_auditenhance_overview');
-$context = context_system::instance();
+$url = new moodle_url('/local/auditenhance/index.php');
+$title = get_string('overview', 'local_auditenhance');
+$output = page::setup('overview', $url, $title);
 
 if (optional_param('run', 0, PARAM_BOOL) && confirm_sesskey()) {
-    require_capability('local/auditenhance:run', $context);
+    require_capability('local/auditenhance:run', context_system::instance());
     run_manager::queue(null, 'web');
-    redirect($PAGE->url);
+    redirect($url, get_string('auditqueued', 'local_auditenhance'), null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
-echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('overview', 'local_auditenhance'));
+$active = run_manager::get_active_run();
+if ($active) {
+    // Reload the page while an audit runs so the progress bar moves.
+    $PAGE->requires->js_init_code('setTimeout(function() { window.location.reload(); }, 15000);');
+}
 
-$latest = run_manager::get_latest_complete_run();
-if ($latest) {
-    echo html_writer::tag('p', get_string('overallscore', 'local_auditenhance') . ': ' .
-        ($latest->score === null ? '-' : (int)$latest->score));
-}
-if (has_capability('local/auditenhance:run', $context)) {
-    echo $OUTPUT->single_button(new moodle_url($PAGE->url, ['run' => 1]), get_string('runaudit', 'local_auditenhance'));
-}
-echo $OUTPUT->footer();
+echo page::start('overview', $title, [], $active ? (int)$active->id : null);
+echo $output->render(new \local_auditenhance\output\overview_page());
+echo page::end();

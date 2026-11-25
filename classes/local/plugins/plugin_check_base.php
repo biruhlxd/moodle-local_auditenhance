@@ -54,7 +54,7 @@ abstract class plugin_check_base extends base implements plugin_check {
      * @return \moodle_url|null
      */
     public function get_fix_url(): ?\moodle_url {
-        return new \moodle_url('/admin/plugins.php', ['contribonly' => 1]);
+        return new \moodle_url('/local/auditenhance/plugins.php');
     }
 
     /**
@@ -90,7 +90,10 @@ abstract class plugin_check_base extends base implements plugin_check {
             0,
             [
                 'label' => $label,
-                'url' => (new \moodle_url('/admin/plugins.php', ['contribonly' => 1]))->out(false),
+                'url' => (new \moodle_url(
+                    '/local/auditenhance/plugins.php',
+                    ['component' => $plugin->get_component()]
+                ))->out(false),
                 'file' => $file,
                 'line' => $line,
                 'extra' => $extra,
