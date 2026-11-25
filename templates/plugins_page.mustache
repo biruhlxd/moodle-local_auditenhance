@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_auditenhance/plugins_page
+
+    Findings per plugin with severity, or the findings of one plugin.
+
+    Example context (json):
+    {
+        "hasrun": true, "rundate": "26 November 2026", "detail": false, "hasplugins": true, "hasexports": false,
+        "exports": [],
+        "plugins": [{"name": "Example (local_example)", "url": "#", "severity": "high", "severityname": "High",
+                     "items": 3, "counts": [{"severity": "high", "name": "High", "count": 3}]}]
+    }
+}}
+<div class="local-auditenhance-plugins">
+    {{^hasrun}}<div class="alert alert-info">{{#str}} noresultsyet, local_auditenhance {{/str}}</div>{{/hasrun}}
+    {{#hasrun}}
+        <p class="text-muted">{{#str}} lastrun, local_auditenhance, {{rundate}} {{/str}}</p>
+        {{> local_auditenhance/exports }}
+        {{#detail}}
+            <h3 class="h5">{{pluginname}}</h3>
+            <p><a href="{{backurl}}">{{#str}} allplugins, local_auditenhance {{/str}}</a></p>
+            {{^hasitems}}<div class="alert alert-success">{{#str}} nopluginissues, local_auditenhance {{/str}}</div>{{/hasitems}}
+            {{#hasitems}}
+                <table class="table table-striped generaltable">
+                    <thead><tr>
+                        <th scope="col">{{#str}} severity, local_auditenhance {{/str}}</th>
+                        <th scope="col">{{#str}} check, local_auditenhance {{/str}}</th>
+                        <th scope="col">{{#str}} finding, local_auditenhance {{/str}}</th>
+                    </tr></thead>
+                    <tbody>
+                        {{#items}}<tr>
+                            <td><span class="badge local-auditenhance-severity-{{severity}}">{{severityname}}</span></td>
+                            <td>{{check}}</td>
+                            <td>{{label}}</td>
+                        </tr>{{/items}}
+                    </tbody>
+                </table>
+            {{/hasitems}}
+        {{/detail}}
+        {{^detail}}
+            {{^hasplugins}}<div class="alert alert-success">{{#str}} nopluginissues, local_auditenhance {{/str}}</div>{{/hasplugins}}
+            {{#hasplugins}}
+                <table class="table table-striped generaltable">
+                    <thead><tr>
+                        <th scope="col">{{#str}} plugin {{/str}}</th>
+                        <th scope="col">{{#str}} severity, local_auditenhance {{/str}}</th>
+                        <th scope="col">{{#str}} findings, local_auditenhance {{/str}}</th>
+                    </tr></thead>
+                    <tbody>
+                        {{#plugins}}<tr>
+                            <td><a href="{{url}}">{{name}}</a></td>
+                            <td><span class="badge local-auditenhance-severity-{{severity}}">{{severityname}}</span></td>
+                            <td>{{#counts}}<span class="badge local-auditenhance-severity-{{severity}}">{{name}}: {{count}}</span> {{/counts}}</td>
+                        </tr>{{/plugins}}
+                    </tbody>
+                </table>
+            {{/hasplugins}}
+        {{/detail}}
+    {{/hasrun}}
+</div>
