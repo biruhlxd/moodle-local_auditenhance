@@ -36,6 +36,7 @@ final class settings {
             'minpasswordlength' => 8,
             'maxadmins' => 3,
             'adminidledays' => 90,
+            'tokenidledays' => 365,
             // Performance and storage.
             'largesiteusers' => 2000,
             'largecoursemb' => 2048,
@@ -43,12 +44,15 @@ final class settings {
             'backupagedays' => 365,
             'slowtaskminutes' => 10,
             'adhocbacklog' => 500,
+            'diskfreepercent' => 20,
             // Site hygiene.
             'neverloggedindays' => 30,
             'inactivemonths' => 12,
             'newcoursedays' => 30,
             'courseinactivemonths' => 12,
             'courseendgracedays' => 30,
+            // Plugin risk.
+            'staleyears' => 3,
         ];
     }
 

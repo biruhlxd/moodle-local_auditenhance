@@ -47,6 +47,9 @@ final class hook_callbacks {
             \local_auditenhance\check\security\riskycaps::class,
             \local_auditenhance\check\security\coreversion::class,
             \local_auditenhance\check\security\pluginupdates::class,
+            \local_auditenhance\check\security\mfa::class,
+            \local_auditenhance\check\security\webservicetokens::class,
+            \local_auditenhance\check\security\phpversion::class,
         ]);
 
         $hook->add_area(new area('performance', 'local_auditenhance', 15, 20, 'performance'));
@@ -62,6 +65,7 @@ final class hook_callbacks {
             \local_auditenhance\check\performance\failedtasks::class,
             \local_auditenhance\check\performance\slowtasks::class,
             \local_auditenhance\check\performance\adhocbacklog::class,
+            \local_auditenhance\check\performance\diskspace::class,
         ]);
 
         $hook->add_area(new area('hygiene', 'local_auditenhance', 15, 30));
@@ -77,6 +81,8 @@ final class hook_callbacks {
             \local_auditenhance\check\hygiene\completionoff::class,
             \local_auditenhance\check\hygiene\unusedplugins::class,
             \local_auditenhance\check\hygiene\disabledplugins::class,
+            \local_auditenhance\check\hygiene\emptycategories::class,
+            \local_auditenhance\check\hygiene\noenrolments::class,
         ]);
 
         $hook->add_area(new area('accessibility', 'local_auditenhance', 20, 40));
@@ -98,6 +104,8 @@ final class hook_callbacks {
             \local_auditenhance\check\accessibility\htmllang::class,
             \local_auditenhance\check\accessibility\statement::class,
             \local_auditenhance\check\accessibility\themecontrast::class,
+            \local_auditenhance\check\accessibility\iframetitles::class,
+            \local_auditenhance\check\accessibility\autoplay::class,
         ]);
         $hook->add_scanner(new \local_auditenhance\local\scanner\brickfield_scanner());
         $hook->add_scanner(new \local_auditenhance\local\scanner\content_scanner());
@@ -125,6 +133,7 @@ final class hook_callbacks {
             \local_auditenhance\check\pluginrisk\missingversion::class,
             \local_auditenhance\check\pluginrisk\licenceheader::class,
             \local_auditenhance\check\pluginrisk\langstrings::class,
+            \local_auditenhance\check\pluginrisk\staleplugins::class,
             \local_auditenhance\check\pluginrisk\riskycapsdefault::class,
             \local_auditenhance\check\pluginrisk\riskyoverrides::class,
             \local_auditenhance\check\pluginrisk\roleescalation::class,
