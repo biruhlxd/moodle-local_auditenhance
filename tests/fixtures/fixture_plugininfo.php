@@ -33,12 +33,54 @@ class fixture_plugininfo extends \core\plugininfo\local {
     public static function make(string $name): \core\plugininfo\base {
         return self::make_plugin_instance(
             'local',
-            __DIR__ . '/plugins',
+            self::root(),
             $name,
-            __DIR__ . '/plugins/' . $name,
+            self::path($name),
             self::class,
             \core_plugin_manager::instance()
         );
+    }
+
+    /** @var string|null Temporary folder holding the fixture plugins as PHP files. */
+    private static ?string $root = null;
+
+    /**
+     * Temporary folder with the fixture plugins.
+     *
+     * The fixtures contain deliberately unsafe code. They are kept as .php.txt files in the repository, so
+     * that code checkers and the plugins directory do not treat them as plugin code, and are copied here as
+     * .php files when the tests need them.
+     *
+     * @return string
+     */
+    public static function root(): string {
+        if (self::$root === null || !is_dir(self::$root)) {
+            self::$root = make_temp_directory('local_auditenhance_fixtures/' . uniqid());
+            $source = __DIR__ . '/plugins';
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+            foreach ($iterator as $file) {
+                $target = self::$root . substr($file->getPathname(), strlen($source));
+                if ($file->isDir()) {
+                    check_dir_exists($target);
+                } else {
+                    copy($file->getPathname(), preg_replace('/\.php\.txt$/', '.php', $target));
+                }
+            }
+        }
+        return self::$root;
+    }
+
+    /**
+     * Folder of one fixture plugin.
+     *
+     * @param string $name
+     * @return string
+     */
+    public static function path(string $name): string {
+        return self::root() . '/' . $name;
     }
 
     /**

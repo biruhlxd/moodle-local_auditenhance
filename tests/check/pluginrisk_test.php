@@ -62,8 +62,8 @@ final class pluginrisk_test extends \advanced_testcase {
      */
     public static function setUpBeforeClass(): void {
         parent::setUpBeforeClass();
-        require_once(__DIR__ . '/../fixtures/plugins/nullfixture/classes/privacy/provider.php');
-        require_once(__DIR__ . '/../fixtures/plugins/metafixture/classes/privacy/provider.php');
+        require_once(fixture_plugininfo::path('nullfixture') . '/classes/privacy/provider.php');
+        require_once(fixture_plugininfo::path('metafixture') . '/classes/privacy/provider.php');
     }
 
     /**
@@ -186,7 +186,7 @@ final class pluginrisk_test extends \advanced_testcase {
         $this->assertGreaterThan(0, $detail['line']);
 
         $this->assertSame([], $this->issues(new missingversion(), 'riskyfixture'));
-        $this->assertSame(['nolicence: 1 files'], $this->issues(new licenceheader(), 'riskyfixture'));
+        $this->assertSame(['nolicence: Files: 1'], $this->issues(new licenceheader(), 'riskyfixture'));
         $this->assertSame([], $this->issues(new licenceheader(), 'nullfixture'));
         $this->assertSame(['nolangfile: '], $this->issues(new langstrings(), 'riskyfixture'));
         $this->assertSame([], $this->issues(new langstrings(), 'nullfixture'));
