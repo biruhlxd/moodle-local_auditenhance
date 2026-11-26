@@ -257,8 +257,13 @@ abstract class base extends \core\check\check {
     protected function finding_from_items(run_context $context, int $samplesize = 5): finding {
         $ref = $this->get_ref();
         $count = $context->count_items($ref);
+        $muted = $context->count_muted_items($ref);
         if ($count === 0) {
-            return finding::pass($this->summary('ok'));
+            $finding = finding::pass($this->summary('ok'));
+            if ($muted) {
+                $finding->details['muteditems'] = $muted;
+            }
+            return $finding;
         }
         $severity = $context->get_max_item_severity($ref) ?? $this->get_default_severity();
         $sample = [];
@@ -266,7 +271,8 @@ abstract class base extends \core\check\check {
             $detail = json_decode($record->detail ?? '', true) ?: [];
             $sample[] = ['label' => $detail['label'] ?? $record->issue, 'url' => $detail['url'] ?? null];
         }
-        return finding::fail($severity, $this->summary('fail', $count), [], $count)
+        $details = $muted ? ['muteditems' => $muted] : [];
+        return finding::fail($severity, $this->summary('fail', $count), $details, $count)
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

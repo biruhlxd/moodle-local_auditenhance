@@ -72,6 +72,7 @@
                                     <span class="badge local-auditenhance-severity-{{severityclass}}">{{severity}}</span>
                                     {{#url}}<a href="{{url}}">{{label}}</a>{{/url}}{{^url}}{{label}}{{/url}}
                                     {{#snippet}}<br><code class="small text-break">{{snippet}}</code>{{/snippet}}
+                                    {{#muteurl}} <a class="small" href="{{muteurl}}">{{#str}} muteitem, local_auditenhance {{/str}}</a>{{/muteurl}}
                                 </li>
                             {{/items}}
                         </ul>

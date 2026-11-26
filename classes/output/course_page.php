@@ -80,7 +80,10 @@ class course_page implements \renderable, \templatable {
                     'snippet' => $detail['snippet'] ?? null,
                     'severity' => severity::get_name($item->severity),
                     'severityclass' => $item->severity,
-                ];
+                ] + finding_exporter::item_mute_links(
+                    $item,
+                    new \moodle_url('/local/auditenhance/course.php', ['id' => $this->course->id])
+                );
             }
             $data['checks'][] = [
                 'name' => $check->get_name(),

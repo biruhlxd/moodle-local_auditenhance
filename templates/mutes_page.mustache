@@ -46,4 +46,27 @@
             </tbody>
         </table>
     {{/hasmutes}}
+    <h3 class="h5 mt-4">{{#str}} muteditems, local_auditenhance {{/str}}</h3>
+    <p>{{#str}} muteditemsintro, local_auditenhance {{/str}}</p>
+    {{^hasitemmutes}}<div class="alert alert-info">{{#str}} noitemmutes, local_auditenhance {{/str}}</div>{{/hasitemmutes}}
+    {{#hasitemmutes}}
+        <table class="table table-striped generaltable">
+            <thead><tr>
+                <th scope="col">{{#str}} check, local_auditenhance {{/str}}</th>
+                <th scope="col">{{#str}} muteditem, local_auditenhance {{/str}}</th>
+                <th scope="col">{{#str}} reason, local_auditenhance {{/str}}</th>
+                <th scope="col">{{#str}} mutedby, local_auditenhance {{/str}}</th>
+                <th scope="col"><span class="sr-only visually-hidden">{{#str}} actions {{/str}}</span></th>
+            </tr></thead>
+            <tbody>
+                {{#itemmutes}}<tr>
+                    <td>{{check}}</td>
+                    <td>{{label}}</td>
+                    <td>{{{reason}}}</td>
+                    <td>{{user}}<br><small class="text-muted">{{time}}</small></td>
+                    <td>{{#unmuteurl}}<a class="btn btn-sm btn-secondary" href="{{unmuteurl}}">{{#str}} unmute, local_auditenhance {{/str}}</a>{{/unmuteurl}}</td>
+                </tr>{{/itemmutes}}
+            </tbody>
+        </table>
+    {{/hasitemmutes}}
 </div>

@@ -55,6 +55,24 @@ class mutes_page implements \renderable, \templatable {
             ];
         }
         $data['hasmutes'] = !empty($data['mutes']);
+        $data['itemmutes'] = [];
+        foreach (\local_auditenhance\local\item_mutes::get_all() as $mute) {
+            $check = $registry->get_check($mute->checkname);
+            $user = $mute->userid ? $DB->get_record('user', ['id' => $mute->userid]) : null;
+            $data['itemmutes'][] = [
+                'check' => $check ? $check->get_name() : $mute->checkname,
+                'label' => $mute->itemkey === '' ? get_string('muteditemsof', 'local_auditenhance', $mute->component)
+                    : (string)$mute->label,
+                'reason' => format_text((string)$mute->reason, FORMAT_PLAIN),
+                'user' => $user ? fullname($user) : '-',
+                'time' => userdate($mute->timecreated, get_string('strftimedatetimeshort', 'langconfig')),
+                'unmuteurl' => $canrun ? (new \moodle_url(
+                    '/local/auditenhance/muteitem.php',
+                    ['unmute' => $mute->id, 'sesskey' => sesskey()]
+                ))->out(false) : null,
+            ];
+        }
+        $data['hasitemmutes'] = !empty($data['itemmutes']);
         return $data;
     }
 }

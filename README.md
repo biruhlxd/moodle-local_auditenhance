@@ -30,7 +30,8 @@ Site administration > Reports > Audit & Enhance:
   muted checks are listed separately.
 - **Accessibility by course**: issue counts per course and sample items.
 - **Plugin risk by plugin**: findings per plugin with severity.
-- **Muted checks**: checks an administrator has muted, with the reason.
+- **Muted checks**: checks and single items an administrator has muted, with the reason. Single items (or all items
+  of one plugin for a check) are muted from the plugin and course item lists.
 - **Settings**: thresholds, area weights, score penalties, which plugins to scan, scan options.
 
 Editing teachers find **Accessibility audit** in their course's "More" menu. It shows the issues in their own course.

@@ -52,6 +52,11 @@ class provider implements
             'userid' => 'privacy:metadata:mute:userid',
             'timecreated' => 'privacy:metadata:mute:timecreated',
         ], 'privacy:metadata:mute');
+        $collection->add_database_table('local_auditenhance_itemmute', [
+            'reason' => 'privacy:metadata:itemmute:reason',
+            'userid' => 'privacy:metadata:itemmute:userid',
+            'timecreated' => 'privacy:metadata:itemmute:timecreated',
+        ], 'privacy:metadata:itemmute');
         $collection->add_database_table('local_auditenhance_run', [
             'userid' => 'privacy:metadata:run:userid',
             'timecreated' => 'privacy:metadata:run:timecreated',
@@ -76,7 +81,8 @@ class provider implements
         global $DB;
         $contextlist = new contextlist();
         if (
-            $DB->record_exists('local_auditenhance_mute', ['userid' => $userid])
+            $DB->record_exists('local_auditenhance_itemmute', ['userid' => $userid])
+            || $DB->record_exists('local_auditenhance_mute', ['userid' => $userid])
                 || $DB->record_exists('local_auditenhance_run', ['userid' => $userid])
         ) {
             $contextlist->add_system_context();
@@ -99,6 +105,7 @@ class provider implements
         if ($context instanceof \context_system) {
             $userlist->add_from_sql('userid', "SELECT userid FROM {local_auditenhance_mute} WHERE userid > 0", []);
             $userlist->add_from_sql('userid', "SELECT userid FROM {local_auditenhance_run} WHERE userid > 0", []);
+            $userlist->add_from_sql('userid', "SELECT userid FROM {local_auditenhance_itemmute} WHERE userid > 0", []);
         }
         $userlist->add_from_sql(
             'userid',
@@ -134,6 +141,14 @@ class provider implements
                         'timecreated' => transform::datetime($run->timecreated),
                     ];
                 }
+                foreach ($DB->get_records('local_auditenhance_itemmute', ['userid' => $userid], 'id') as $mute) {
+                    $mutes[] = [
+                        'checkname' => $mute->checkname,
+                        'item' => $mute->label,
+                        'reason' => $mute->reason,
+                        'timecreated' => transform::datetime($mute->timecreated),
+                    ];
+                }
                 if ($mutes || $runs) {
                     writer::with_context($context)->export_data($subcontext, (object)['mutes' => $mutes, 'runs' => $runs]);
                 }
@@ -164,6 +179,7 @@ class provider implements
         global $DB;
         if ($context instanceof \context_system) {
             $DB->set_field('local_auditenhance_mute', 'userid', 0);
+            $DB->set_field('local_auditenhance_itemmute', 'userid', 0);
             $DB->set_field('local_auditenhance_run', 'userid', 0);
         }
         $DB->delete_records_select(
@@ -184,6 +200,7 @@ class provider implements
         foreach ($contextlist->get_contexts() as $context) {
             if ($context instanceof \context_system) {
                 $DB->set_field('local_auditenhance_mute', 'userid', 0, ['userid' => $userid]);
+                $DB->set_field('local_auditenhance_itemmute', 'userid', 0, ['userid' => $userid]);
                 $DB->set_field('local_auditenhance_run', 'userid', 0, ['userid' => $userid]);
             }
             $DB->delete_records('local_auditenhance_item', ['userid' => $userid, 'contextid' => $context->id]);
@@ -205,6 +222,7 @@ class provider implements
         [$insql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         if ($context instanceof \context_system) {
             $DB->set_field_select('local_auditenhance_mute', 'userid', 0, "userid $insql", $params);
+            $DB->set_field_select('local_auditenhance_itemmute', 'userid', 0, "userid $insql", $params);
             $DB->set_field_select('local_auditenhance_run', 'userid', 0, "userid $insql", $params);
         }
         $params['contextid'] = $context->id;

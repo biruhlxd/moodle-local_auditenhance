@@ -86,12 +86,13 @@ class plugins_page implements \renderable, \templatable {
             foreach (items::get_for_component($runid, $this->areaid, $this->component) as $item) {
                 $check = $registry->get_check($item->checkname);
                 $detail = items::detail($item);
+                $returnurl = new \moodle_url('/local/auditenhance/plugins.php', ['component' => $this->component]);
                 $data['items'][] = [
                     'check' => $check ? $check->get_name() : $item->checkname,
                     'label' => $detail['label'] ?? $item->issue,
                     'severity' => $item->severity,
                     'severityname' => severity::get_name($item->severity),
-                ];
+                ] + finding_exporter::item_mute_links($item, $returnurl, true);
             }
             usort($data['items'], fn($a, $b) => severity::rank($b['severity']) <=> severity::rank($a['severity']));
             $data['hasitems'] = !empty($data['items']);

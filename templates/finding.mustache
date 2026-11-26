@@ -38,6 +38,7 @@
             {{#showarea}}<small class="text-muted">· <a href="{{areaurl}}">{{areaname}}</a></small>{{/showarea}}
         </h4>
         <p class="mb-2">{{summary}}</p>
+        {{#muteditems}}<p class="small text-muted mb-2">{{#str}} muteditemscount, local_auditenhance, {{muteditems}} {{/str}}</p>{{/muteditems}}
         {{#muted}}<p class="small mb-2"><strong>{{#str}} mutedreason, local_auditenhance {{/str}}</strong> {{mutereason}}</p>{{/muted}}
         <details>
             <summary class="small">{{#str}} details, local_auditenhance {{/str}}</summary>

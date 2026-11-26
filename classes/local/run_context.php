@@ -50,6 +50,9 @@ class run_context {
     /** @var array<string, item[]> Items kept in memory in live mode. */
     protected array $liveitems = [];
 
+    /** @var array<string, int> Items left out because they are muted, per check reference. */
+    protected array $mutedcounts = [];
+
     /** @var array<string, finding> Findings produced so far in this run. */
     protected array $findings = [];
 
@@ -67,6 +70,7 @@ class run_context {
         $this->counts = $state['counts'] ?? [];
         $this->maxseverity = $state['maxseverity'] ?? [];
         $this->data = $state['data'] ?? [];
+        $this->mutedcounts = $state['muted'] ?? [];
     }
 
     /**
@@ -129,6 +133,10 @@ class run_context {
      */
     public function add_item(base $check, item $item): void {
         $ref = $check->get_ref();
+        if (item_mutes::is_muted($ref, $item->get_key($ref), $item->component)) {
+            $this->mutedcounts[$ref] = ($this->mutedcounts[$ref] ?? 0) + 1;
+            return;
+        }
         $this->counts[$ref] = ($this->counts[$ref] ?? 0) + 1;
         $current = $this->maxseverity[$ref] ?? severity::INFO;
         $this->maxseverity[$ref] = severity::max($current, $item->severity);
@@ -169,6 +177,16 @@ class run_context {
      */
     public function count_items(string $checkref): int {
         return $this->counts[$checkref] ?? 0;
+    }
+
+    /**
+     * Number of items of a check left out because they are muted.
+     *
+     * @param string $checkref
+     * @return int
+     */
+    public function count_muted_items(string $checkref): int {
+        return $this->mutedcounts[$checkref] ?? 0;
     }
 
     /**
@@ -265,6 +283,7 @@ class run_context {
      */
     public function export_state(): array {
         $this->flush();
-        return ['counts' => $this->counts, 'maxseverity' => $this->maxseverity, 'data' => $this->data];
+        return ['counts' => $this->counts, 'maxseverity' => $this->maxseverity, 'data' => $this->data,
+            'muted' => $this->mutedcounts];
     }
 }
