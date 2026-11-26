@@ -69,6 +69,7 @@ class finding_exporter {
             'actions' => [],
         ];
         $data['hassample'] = !empty($data['sample']);
+        $data['muteditems'] = (int)($finding->details['muteditems'] ?? 0);
         foreach ($registry->get_finding_actions() as $action) {
             foreach ($action->get_actions($check, $finding, $mute !== null) as $link) {
                 $data['actions'][] = ['url' => $link->url->out(false), 'text' => $link->text,
@@ -77,5 +78,25 @@ class finding_exporter {
         }
         $data['hasactions'] = !empty($data['actions']);
         return $data;
+    }
+
+    /**
+     * Links to mute one item, or all items of its component, for users who may run audits.
+     *
+     * @param \stdClass $item Row of local_auditenhance_item.
+     * @param \moodle_url $returnurl
+     * @param bool $withcomponent Also offer to mute the whole component.
+     * @return array Template data: muteurl and mutewholeurl (null when not allowed).
+     */
+    public static function item_mute_links(\stdClass $item, \moodle_url $returnurl, bool $withcomponent = false): array {
+        if (!has_capability('local/auditenhance:run', \context_system::instance()) || empty($item->itemkey)) {
+            return ['muteurl' => null, 'mutewholeurl' => null];
+        }
+        $params = ['item' => $item->id, 'returnurl' => $returnurl->out_as_local_url(false)];
+        return [
+            'muteurl' => (new \moodle_url('/local/auditenhance/muteitem.php', $params))->out(false),
+            'mutewholeurl' => $withcomponent && $item->component !== ''
+                ? (new \moodle_url('/local/auditenhance/muteitem.php', $params + ['whole' => 1]))->out(false) : null,
+        ];
     }
 }

@@ -47,7 +47,10 @@
                         {{#items}}<tr>
                             <td><span class="badge local-auditenhance-severity-{{severity}}">{{severityname}}</span></td>
                             <td>{{check}}</td>
-                            <td>{{label}}</td>
+                            <td>{{label}}
+                                {{#muteurl}}<br><a class="small" href="{{muteurl}}">{{#str}} muteitem, local_auditenhance {{/str}}</a>{{/muteurl}}
+                                {{#mutewholeurl}} · <a class="small" href="{{mutewholeurl}}">{{#str}} muteitemallplugin, local_auditenhance {{/str}}</a>{{/mutewholeurl}}
+                            </td>
                         </tr>{{/items}}
                     </tbody>
                 </table>

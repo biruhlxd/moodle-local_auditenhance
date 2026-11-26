@@ -36,7 +36,7 @@ class mute_form extends \moodleform {
         $mform->addElement(
             'static',
             'checkname',
-            get_string('check', 'local_auditenhance'),
+            $this->_customdata['label'] ?? get_string('check', 'local_auditenhance'),
             s($this->_customdata['checkname'])
         );
         $mform->addElement('textarea', 'reason', get_string('reason', 'local_auditenhance'), ['rows' => 3, 'cols' => 60]);
