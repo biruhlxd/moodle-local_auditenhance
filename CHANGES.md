@@ -1,5 +1,18 @@
 # Changes
 
+## 1.2.0 (2026-12-01)
+
+Nine new checks (70 in total):
+
+- Security: multi-factor authentication, web service tokens (administrator tokens that never expire, unused
+  tokens), PHP version support.
+- Performance and storage: free disk space of the Moodle data folder.
+- Site hygiene: empty course categories, visible courses without enrolments.
+- Accessibility: embedded frames without a title, video and audio that play on their own.
+- Plugin risk: add-on plugins whose version is many years old.
+
+New thresholds: unused token (days), low disk space (%), old plugin version (years).
+
 ## 1.1.0 (2026-11-28)
 
 - Mute a single item (for example one image or one line of plugin code) or every item of one plugin for a check,
