@@ -161,9 +161,10 @@ final class content_scanner_test extends \advanced_testcase {
         brickfield::reset();
         $this->assertTrue(brickfield::in_use());
 
-        // Mapped checks are no longer scanned; media has no Brickfield equivalent and still is.
-        $remaining = array_map(fn($c) => $c->get_id(), $scanner->filter_checks($contentchecks));
-        $this->assertSame(['media'], array_values($remaining));
+        // Mapped checks are no longer scanned; checks without a Brickfield equivalent still are.
+        $remaining = array_values(array_map(fn($c) => $c->get_id(), $scanner->filter_checks($contentchecks)));
+        sort($remaining);
+        $this->assertSame(['autoplay', 'iframetitles', 'media'], $remaining);
 
         $run = run_manager::create_run(['accessibility'], 'test');
         run_manager::execute((int)$run->id);

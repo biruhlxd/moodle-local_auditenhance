@@ -120,7 +120,7 @@ final class pluginrisk_test extends \advanced_testcase {
             $this->assertNotEmpty($check->get_explanation(), $check->get_id());
             $this->assertNotEmpty($check->get_fix(), $check->get_id());
         }
-        $this->assertCount(16, registry::instance()->get_checks(['pluginrisk']));
+        $this->assertCount(17, registry::instance()->get_checks(['pluginrisk']));
     }
 
     /**
@@ -326,7 +326,7 @@ final class pluginrisk_test extends \advanced_testcase {
         $run = run_manager::create_run(['pluginrisk'], 'test');
         $this->assertTrue(run_manager::execute((int)$run->id));
         $findings = \local_auditenhance\local\results::get_for_run((int)$run->id);
-        $this->assertCount(16, $findings);
+        $this->assertCount(17, $findings);
         foreach ($findings as $ref => $finding) {
             $this->assertNotSame('error', $finding->status, $ref . ': ' . $finding->summary);
         }

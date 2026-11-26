@@ -9,11 +9,11 @@ Installs as `local/auditenhance`. Works with Moodle 4.5 LTS to 5.3, PHP 8.1 or l
 
 | Area | Examples |
 |---|---|
-| Security and configuration | Debug display, cron, HTTPS, password policy, self-registration, guest access, search engines on a private site, site administrators, the "admin" username, risky permissions for everyone, Moodle version support, plugin updates |
-| Performance and storage | Cache stores, OPcache, database sessions on large sites, largest courses and files, orphaned files, backup and log retention, failing and slow tasks, ad hoc task queue |
-| Site hygiene | Accounts never used or inactive, suspended users still enrolled, duplicate emails, empty courses, courses without a teacher or visits, ended courses still visible, completion tracking, unused or disabled add-ons |
-| Accessibility | Image alternative text, headings, link text, tables, text contrast, video captions, documents to review, page language, accessibility statement, theme colour contrast |
-| Plugin risk | Privacy providers and metadata, supported versions, deprecated APIs, missing dependencies, unsafe functions, raw request data, SQL built from variables, licence headers, language strings, risky default permissions, permission overrides, role escalation, combined risks |
+| Security and configuration | Debug display, cron, HTTPS, password policy, self-registration, guest access, search engines on a private site, site administrators, the "admin" username, risky permissions for everyone, Moodle and PHP version support, plugin updates, multi-factor authentication, web service tokens |
+| Performance and storage | Cache stores, OPcache, database sessions on large sites, largest courses and files, orphaned files, backup and log retention, failing and slow tasks, ad hoc task queue, free disk space |
+| Site hygiene | Accounts never used or inactive, suspended users still enrolled, duplicate emails, empty courses, courses without a teacher or visits, ended courses still visible, completion tracking, empty categories, courses without enrolments, unused or disabled add-ons |
+| Accessibility | Image alternative text, headings, link text, tables, text contrast, video captions, frame titles, autoplaying media, documents to review, page language, accessibility statement, theme colour contrast |
+| Plugin risk | Privacy providers and metadata, supported versions, deprecated APIs, missing dependencies, unsafe functions, raw request data, SQL built from variables, licence headers, language strings, plugins not updated for years, risky default permissions, permission overrides, role escalation, combined risks |
 
 Every finding has a severity (critical, high, medium, low, info), says why it matters and how to fix it, and links to
 the setting or content to change.
