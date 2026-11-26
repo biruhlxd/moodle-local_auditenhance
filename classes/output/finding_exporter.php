@@ -59,7 +59,7 @@ class finding_exporter {
             'summary' => $finding ? $finding->summary : get_string('notscannedyet', 'local_auditenhance'),
             'why' => $check->get_explanation(),
             'fix' => $check->get_fix(),
-            'link' => $finding && $finding->link ? $finding->link : ($fixurl ? $fixurl->out(false) : null),
+            'link' => $status !== 'fail' ? null : ($finding->link ?: ($fixurl ? $fixurl->out(false) : null)),
             'sample' => array_values($finding->details['sample'] ?? []),
             'itemcount' => $finding ? $finding->itemcount : 0,
             'muted' => $mute !== null,

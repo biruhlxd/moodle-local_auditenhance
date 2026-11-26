@@ -1,5 +1,9 @@
 # Changes
 
+## 1.2.1 (2026-12-02)
+
+- "Fix this" is only shown on failed findings, not on passed or skipped ones.
+
 ## 1.2.0 (2026-12-01)
 
 Nine new checks (70 in total):
