@@ -1,5 +1,14 @@
 # Changes
 
+## 1.1.0 (2026-11-28)
+
+- Mute a single item (for example one image or one line of plugin code) or every item of one plugin for a check,
+  with a reason. Muted items are left out of counts and scores from the next audit on, and listed under Muted
+  checks > Muted items, where they can be unmuted.
+- Findings show how many items were left out because they are muted.
+- Each stored item has a stable key (new `itemkey` column), so the same item can be recognised across runs.
+- New events: audit item muted and unmuted. The privacy provider covers item mutes.
+
 ## 1.0.1 (2026-11-27)
 
 - Finding summaries are stored as language string references and shown in the reader's language. Summaries stored
