@@ -160,6 +160,24 @@ final class screens_test extends \advanced_testcase {
     }
 
     /**
+     * The fix link is only shown on failed findings.
+     */
+    public function test_fix_link_on_failures_only(): void {
+        global $PAGE;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $check = registry::instance()->get_check('local_auditenhance_guestlogin');
+        $output = $PAGE->get_renderer('local_auditenhance');
+        $entry = fn($finding) => ['finding' => $finding, 'source' => 'live', 'time' => time(), 'runid' => 0];
+        $data = finding_exporter::export($check, $entry(\local_auditenhance\local\finding::fail('low', 'x')), null, $output);
+        $this->assertStringContainsString('manageauths', $data['link']);
+        $data = finding_exporter::export($check, $entry(\local_auditenhance\local\finding::pass('ok')), null, $output);
+        $this->assertNull($data['link']);
+        $data = finding_exporter::export($check, null, null, $output);
+        $this->assertNull($data['link']);
+    }
+
+    /**
      * Tabs come from the registry.
      */
     public function test_tabs(): void {
