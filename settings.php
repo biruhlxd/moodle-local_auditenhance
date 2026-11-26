@@ -132,6 +132,13 @@ if ($hassiteconfig) {
             PARAM_INT
         ));
         $settings->add(new admin_setting_configtext(
+            'local_auditenhance/keepitemruns',
+            new lang_string('settingkeepitemruns', 'local_auditenhance'),
+            new lang_string('settingkeepitemruns_desc', 'local_auditenhance'),
+            5,
+            PARAM_INT
+        ));
+        $settings->add(new admin_setting_configtext(
             'local_auditenhance/quickcachettl',
             new lang_string('settingquickcachettl', 'local_auditenhance'),
             new lang_string('settingquickcachettl_desc', 'local_auditenhance'),

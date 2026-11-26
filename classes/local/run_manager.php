@@ -420,20 +420,6 @@ final class run_manager {
      */
     public static function cleanup(): void {
         global $DB;
-        $keep = (int)get_config('local_auditenhance', 'keepruns');
-        if ($keep <= 0) {
-            return;
-        }
-        $old = $DB->get_fieldset_select(
-            'local_auditenhance_run',
-            'id',
-            'status = ? OR status = ?',
-            [self::STATUS_COMPLETE, self::STATUS_FAILED]
-        );
-        rsort($old);
-        foreach (array_slice($old, $keep) as $runid) {
-            self::delete_run((int)$runid);
-        }
         // Runs stuck in the queue for a long time are marked failed.
         $DB->set_field_select(
             'local_auditenhance_run',
@@ -442,6 +428,49 @@ final class run_manager {
             '(status = ? OR status = ?) AND timemodified < ?',
             [self::STATUS_QUEUED, self::STATUS_RUNNING, time() - self::STALE_AFTER]
         );
+
+        $keep = (int)get_config('local_auditenhance', 'keepruns');
+        if ($keep > 0) {
+            $old = $DB->get_fieldset_select(
+                'local_auditenhance_run',
+                'id',
+                'status = ? OR status = ?',
+                [self::STATUS_COMPLETE, self::STATUS_FAILED]
+            );
+            rsort($old);
+            foreach (array_slice($old, $keep) as $runid) {
+                self::delete_run((int)$runid);
+            }
+        }
+        self::cleanup_items();
+    }
+
+    /**
+     * Delete the items of older runs. Results (scores and findings) are kept for history; items are only kept
+     * for the latest runs of each area, because they are the bulk of the stored data.
+     */
+    public static function cleanup_items(): void {
+        global $DB;
+        $keep = get_config('local_auditenhance', 'keepitemruns');
+        $keep = ($keep === false || $keep === '') ? 5 : (int)$keep;
+        if ($keep <= 0) {
+            return;
+        }
+        $areas = $DB->get_fieldset_sql('SELECT DISTINCT area FROM {local_auditenhance_item}');
+        foreach ($areas as $area) {
+            $runids = $DB->get_fieldset_sql(
+                'SELECT DISTINCT runid FROM {local_auditenhance_item} WHERE area = :area',
+                ['area' => $area]
+            );
+            rsort($runids);
+            $old = array_slice($runids, $keep);
+            if (!$old) {
+                continue;
+            }
+            [$insql, $params] = $DB->get_in_or_equal($old, SQL_PARAMS_NAMED);
+            $params['area'] = $area;
+            $DB->delete_records_select('local_auditenhance_item', "area = :area AND runid $insql", $params);
+        }
     }
 
     /**
