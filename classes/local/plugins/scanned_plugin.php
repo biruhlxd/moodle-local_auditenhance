@@ -104,7 +104,7 @@ class scanned_plugin {
             new \RecursiveCallbackFilterIterator(
                 new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS),
                 function (\SplFileInfo $file) use ($root, $thirdparty): bool {
-                    $relative = ltrim(substr($file->getPathname(), strlen($root)), '/');
+                    $relative = self::relative_path($file->getPathname(), $root);
                     foreach ($thirdparty as $path) {
                         if ($relative === $path || str_starts_with($relative, $path . '/')) {
                             return false;
@@ -118,10 +118,21 @@ class scanned_plugin {
             )
         );
         foreach ($iterator as $file) {
-            $this->phpfiles[] = ltrim(substr($file->getPathname(), strlen($root)), '/');
+            $this->phpfiles[] = self::relative_path($file->getPathname(), $root);
         }
         sort($this->phpfiles);
         return $this->phpfiles;
+    }
+
+    /**
+     * Path of a file relative to the root, with forward slashes (Windows paths use backslashes).
+     *
+     * @param string $path
+     * @param string $root
+     * @return string
+     */
+    private static function relative_path(string $path, string $root): string {
+        return ltrim(str_replace('\\', '/', substr($path, strlen($root))), '/');
     }
 
     /**

@@ -201,8 +201,12 @@ final class hygiene_test extends \advanced_testcase {
         $usage = unusedplugins::get_usage();
         $this->assertSame(1, $usage['mod']['page']);
         $this->assertArrayHasKey('topics', $usage['format']);
-        // A test site only has standard plugins.
-        $this->assertSame(finding::STATUS_PASS, $this->run_check(new unusedplugins())->status);
+        // Standard plugins are never listed; the site may have add-ons without instances.
+        $finding = $this->run_check(new unusedplugins());
+        foreach ($finding->details['sample'] ?? [] as $entry) {
+            $this->assertStringNotContainsString('(mod_page)', $entry['label']);
+            $this->assertStringNotContainsString('(format_topics)', $entry['label']);
+        }
     }
 
     /**
