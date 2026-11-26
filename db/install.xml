@@ -66,6 +66,7 @@
         <FIELD NAME="severity" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="info" SEQUENCE="false"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User who owns the content, 0 when unknown."/>
         <FIELD NAME="detail" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="JSON details such as a snippet, a link or a code location."/>
+        <FIELD NAME="itemkey" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="Stable key of the item across runs."/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
@@ -76,6 +77,25 @@
         <INDEX NAME="runid-checkname" UNIQUE="false" FIELDS="runid, checkname"/>
         <INDEX NAME="runid-courseid" UNIQUE="false" FIELDS="runid, courseid"/>
         <INDEX NAME="runid-component" UNIQUE="false" FIELDS="runid, component"/>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_auditenhance_itemmute" COMMENT="Single items, or all items of one component, muted for a check.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="checkname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="itemkey" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="Key of the muted item, empty when the whole component is muted."/>
+        <FIELD NAME="component" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="Component whose items are all muted, empty for a single item."/>
+        <FIELD NAME="label" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description of what is muted, for display."/>
+        <FIELD NAME="reason" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="checkname" UNIQUE="false" FIELDS="checkname"/>
         <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
       </INDEXES>
     </TABLE>

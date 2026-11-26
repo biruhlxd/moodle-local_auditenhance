@@ -63,6 +63,19 @@ class item {
     }
 
     /**
+     * Key that identifies the same item in later runs, used to mute it.
+     *
+     * Built from where the problem is, not from values that change between runs (such as line numbers).
+     *
+     * @param string $checkref
+     * @return string
+     */
+    public function get_key(string $checkref): string {
+        return sha1(implode('|', [$checkref, $this->component, $this->issue, $this->contextid, $this->itemid, $this->field,
+            $this->detail['file'] ?? '', $this->detail['extra'] ?? '', $this->detail['snippet'] ?? '']));
+    }
+
+    /**
      * Record for local_auditenhance_item.
      *
      * @param int $runid
@@ -88,6 +101,7 @@ class item {
             'severity' => $this->severity,
             'userid' => $this->userid,
             'detail' => json_encode($detail),
+            'itemkey' => $this->get_key($checkname),
             'timecreated' => time(),
         ];
     }
