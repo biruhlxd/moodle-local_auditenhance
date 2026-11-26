@@ -66,7 +66,7 @@ class slowtasks extends base {
               ORDER BY MAX(timeend - timestart) DESC";
         $tasks = $DB->get_records_sql($sql, ['since' => time() - WEEKSECS, 'limit' => $limit]);
         if (!$tasks) {
-            return finding::pass($this->str('ok', format_time($limit)));
+            return finding::pass($this->summary('ok', format_time($limit)));
         }
         $sample = [];
         foreach ($tasks as $task) {
@@ -74,7 +74,7 @@ class slowtasks extends base {
                 'url' => new \moodle_url('/admin/tasklogs.php', ['filter' => $task->classname])];
         }
         $a = (object)['count' => count($tasks), 'time' => format_time($limit)];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], count($tasks))
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], count($tasks))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

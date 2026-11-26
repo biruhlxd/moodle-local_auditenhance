@@ -101,16 +101,16 @@ class coreversion extends base {
         $update = $this->core_update_available();
         switch ($status) {
             case 'ended':
-                return finding::fail(severity::CRITICAL, $this->str('ended', $a))->with_link($this->get_fix_url());
+                return finding::fail(severity::CRITICAL, $this->summary('ended', $a))->with_link($this->get_fix_url());
             case 'ending':
-                return finding::fail(severity::MEDIUM, $this->str('ending', $a))->with_link($this->get_fix_url());
+                return finding::fail(severity::MEDIUM, $this->summary('ending', $a))->with_link($this->get_fix_url());
             case 'securityonly':
-                return finding::fail(severity::LOW, $this->str('securityonly', $a))->with_link($this->get_fix_url());
+                return finding::fail(severity::LOW, $this->summary('securityonly', $a))->with_link($this->get_fix_url());
         }
         if ($update) {
-            return finding::fail(severity::LOW, $this->str('update', $a))->with_link($this->get_fix_url());
+            return finding::fail(severity::LOW, $this->summary('update', $a))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str($status === 'newer' ? 'newer' : 'ok', $a));
+        return finding::pass($this->summary($status === 'newer' ? 'newer' : 'ok', $a));
     }
 
     /**

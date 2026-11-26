@@ -66,10 +66,10 @@ class noteacher extends base {
         $params = ['courselevel' => CONTEXT_COURSE, 'siteid' => SITEID];
         $count = (int)$DB->count_records_sql("SELECT COUNT(1) $from", $params);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $courses = $DB->get_records_sql("SELECT c.id, c.fullname $from ORDER BY c.id", $params, 0, 10);
-        return finding::fail(severity::LOW, $this->str('fail', $count), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $count), [], $count)
             ->with_sample(emptycourses::course_sample($courses))
             ->with_link($this->get_fix_url());
     }

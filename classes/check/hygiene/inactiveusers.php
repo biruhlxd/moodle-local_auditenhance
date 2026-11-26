@@ -52,7 +52,7 @@ class inactiveusers extends base {
         $params = ['cutoff' => strtotime("-{$months} months"), 'guestid' => $CFG->siteguest];
         $count = $DB->count_records_select('user', $select, $params);
         if (!$count) {
-            return finding::pass($this->str('ok', $months));
+            return finding::pass($this->summary('ok', $months));
         }
         $sample = [];
         foreach ($DB->get_records_select('user', $select, $params, 'lastaccess', '*', 0, 10) as $user) {
@@ -61,7 +61,7 @@ class inactiveusers extends base {
                 'url' => new \moodle_url('/user/profile.php', ['id' => $user->id])];
         }
         $a = (object)['count' => $count, 'months' => $months];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $count)
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

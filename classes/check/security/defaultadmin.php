@@ -39,9 +39,9 @@ class defaultadmin extends base {
         global $CFG, $DB;
         $user = $DB->get_record('user', ['username' => 'admin', 'deleted' => 0, 'mnethostid' => $CFG->mnet_localhost_id]);
         if (!$user || !empty($user->suspended) || !is_siteadmin($user)) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
-        return finding::fail(severity::MEDIUM, $this->str('fail'))
+        return finding::fail(severity::MEDIUM, $this->summary('fail'))
             ->with_link(new \moodle_url('/user/editadvanced.php', ['id' => $user->id]));
     }
 }

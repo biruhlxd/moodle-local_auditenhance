@@ -73,7 +73,7 @@ class passwordpolicy extends base {
             $worst = severity::max($worst, severity::LOW);
         }
         if (!$problems) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         return finding::fail($worst, implode(' ', $problems))->with_link($this->get_fix_url());
     }

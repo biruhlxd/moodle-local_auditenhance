@@ -100,9 +100,9 @@ class unusedplugins extends base {
             }
         }
         if (!$sample) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
-        return finding::fail(severity::LOW, $this->str('fail', count($sample)), [], count($sample))
+        return finding::fail(severity::LOW, $this->summary('fail', count($sample)), [], count($sample))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

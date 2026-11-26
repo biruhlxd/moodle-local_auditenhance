@@ -50,13 +50,13 @@ class siteadmins extends base {
         $max = settings::threshold('maxadmins');
         $a = (object)['count' => count($admins), 'max' => $max];
         if (count($admins) <= $max) {
-            return finding::pass($this->str('ok', $a));
+            return finding::pass($this->summary('ok', $a));
         }
         $sample = [];
         foreach ($admins as $admin) {
             $sample[] = ['label' => fullname($admin), 'url' => new \moodle_url('/user/profile.php', ['id' => $admin->id])];
         }
-        return finding::fail(severity::MEDIUM, $this->str('fail', $a), [], count($admins))
+        return finding::fail(severity::MEDIUM, $this->summary('fail', $a), [], count($admins))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

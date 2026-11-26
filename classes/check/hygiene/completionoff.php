@@ -47,16 +47,16 @@ class completionoff extends base {
     public function evaluate(run_context $context): finding {
         global $CFG, $DB;
         if (empty($CFG->enablecompletion)) {
-            return finding::fail(severity::LOW, $this->str('site'))->with_link($this->get_fix_url());
+            return finding::fail(severity::LOW, $this->summary('site'))->with_link($this->get_fix_url());
         }
         $select = 'id <> :siteid AND visible = 1 AND enablecompletion = 0';
         $params = ['siteid' => SITEID];
         $count = $DB->count_records_select('course', $select, $params);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $courses = $DB->get_records_select('course', $select, $params, 'id', 'id, fullname', 0, 10);
-        return finding::fail(severity::INFO, $this->str('courses', $count), [], $count)
+        return finding::fail(severity::INFO, $this->summary('courses', $count), [], $count)
             ->with_sample(emptycourses::course_sample($courses));
     }
 }

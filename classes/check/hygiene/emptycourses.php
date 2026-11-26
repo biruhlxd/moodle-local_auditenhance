@@ -68,9 +68,9 @@ class emptycourses extends base {
         $params = ['siteid' => SITEID, 'cutoff' => time() - settings::threshold('newcoursedays') * DAYSECS];
         $count = (int)$DB->count_records_sql("SELECT COUNT(1) $from", $params);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
-        return finding::fail(severity::LOW, $this->str('fail', $count), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $count), [], $count)
             ->with_sample(self::course_sample($DB->get_records_sql("SELECT c.id, c.fullname $from ORDER BY c.id", $params, 0, 10)))
             ->with_link($this->get_fix_url());
     }

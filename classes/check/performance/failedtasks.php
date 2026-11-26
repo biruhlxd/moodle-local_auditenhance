@@ -54,7 +54,7 @@ class failedtasks extends base {
             'id, classname, component, faildelay'
         );
         if (!$tasks) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $severity = severity::MEDIUM;
         $sample = [];
@@ -65,7 +65,7 @@ class failedtasks extends base {
             $sample[] = ['label' => ltrim($task->classname, '\\') . ' (' . format_time((int)$task->faildelay) . ')',
                 'url' => new \moodle_url('/admin/tool/task/schedule_task.php', ['task' => $task->classname])];
         }
-        return finding::fail($severity, $this->str('fail', count($tasks)), [], count($tasks))
+        return finding::fail($severity, $this->summary('fail', count($tasks)), [], count($tasks))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

@@ -53,11 +53,11 @@ class themecontrast extends base {
         global $CFG;
         $brand = trim((string)get_config('theme_' . $CFG->theme, 'brandcolor'));
         if ($brand === '') {
-            return finding::pass($this->str('default'));
+            return finding::pass($this->summary('default'));
         }
         $rgb = html::parse_colour($brand);
         if ($rgb === null) {
-            return finding::skip($this->str('unknown', s($brand)));
+            return finding::skip($this->summary('unknown', s($brand)));
         }
         $a = (object)[
             'colour' => $brand,
@@ -65,8 +65,8 @@ class themecontrast extends base {
             'dark' => format_float(html::contrast($rgb, self::DARK_TEXT), 1),
         ];
         if (html::contrast($rgb, [255, 255, 255]) >= 4.5) {
-            return finding::pass($this->str('ok', $a));
+            return finding::pass($this->summary('ok', $a));
         }
-        return finding::fail(severity::MEDIUM, $this->str('fail', $a))->with_link($this->get_fix_url());
+        return finding::fail(severity::MEDIUM, $this->summary('fail', $a))->with_link($this->get_fix_url());
     }
 }

@@ -56,11 +56,11 @@ class debugdisplay extends base {
     public function evaluate(run_context $context): finding {
         global $CFG;
         if (!empty($CFG->debugdisplay) && !empty($CFG->debug)) {
-            return finding::fail(severity::HIGH, $this->str('fail'))->with_link($this->get_fix_url());
+            return finding::fail(severity::HIGH, $this->summary('fail'))->with_link($this->get_fix_url());
         }
         if ((int)($CFG->debug ?? 0) >= DEBUG_DEVELOPER) {
-            return finding::fail(severity::LOW, $this->str('developer'))->with_link($this->get_fix_url());
+            return finding::fail(severity::LOW, $this->summary('developer'))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok'));
+        return finding::pass($this->summary('ok'));
     }
 }

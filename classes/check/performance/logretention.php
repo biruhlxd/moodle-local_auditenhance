@@ -47,11 +47,11 @@ class logretention extends base {
     public function evaluate(run_context $context): finding {
         $enabled = array_filter(explode(',', (string)get_config('tool_log', 'enabled_stores')));
         if (!in_array('logstore_standard', $enabled, true)) {
-            return finding::skip($this->str('notused'));
+            return finding::skip($this->summary('notused'));
         }
         if ((int)get_config('logstore_standard', 'loglifetime') === 0) {
-            return finding::fail(severity::MEDIUM, $this->str('fail'))->with_link($this->get_fix_url());
+            return finding::fail(severity::MEDIUM, $this->summary('fail'))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok', (int)get_config('logstore_standard', 'loglifetime')));
+        return finding::pass($this->summary('ok', (int)get_config('logstore_standard', 'loglifetime')));
     }
 }

@@ -53,14 +53,14 @@ class suspendedenrolled extends base {
         $params = ['active' => ENROL_USER_ACTIVE, 'enabled' => ENROL_INSTANCE_ENABLED];
         $count = (int)$DB->count_records_sql("SELECT COUNT(DISTINCT u.id) $from", $params);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $users = $DB->get_records_sql("SELECT DISTINCT u.* $from ORDER BY u.id", $params, 0, 10);
         $sample = [];
         foreach ($users as $user) {
             $sample[] = ['label' => fullname($user), 'url' => new \moodle_url('/user/profile.php', ['id' => $user->id])];
         }
-        return finding::fail(severity::LOW, $this->str('fail', $count), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $count), [], $count)
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

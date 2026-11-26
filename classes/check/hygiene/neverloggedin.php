@@ -53,14 +53,14 @@ class neverloggedin extends base {
         $params = ['cutoff' => time() - $days * DAYSECS, 'guestid' => $CFG->siteguest, 'mnethostid' => $CFG->mnet_localhost_id];
         $count = $DB->count_records_select('user', $select, $params);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $sample = [];
         foreach ($DB->get_records_select('user', $select, $params, 'timecreated', '*', 0, 10) as $user) {
             $sample[] = ['label' => fullname($user), 'url' => new \moodle_url('/user/profile.php', ['id' => $user->id])];
         }
         $a = (object)['count' => $count, 'days' => $days];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $count)
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

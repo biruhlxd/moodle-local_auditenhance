@@ -52,11 +52,11 @@ class adhocbacklog extends base {
         $threshold = settings::threshold('adhocbacklog');
         $a = (object)['due' => $due, 'failing' => $failing, 'threshold' => $threshold];
         if ($due > $threshold) {
-            return finding::fail(severity::MEDIUM, $this->str('backlog', $a), [], $due)->with_link($this->get_fix_url());
+            return finding::fail(severity::MEDIUM, $this->summary('backlog', $a), [], $due)->with_link($this->get_fix_url());
         }
         if ($failing) {
-            return finding::fail(severity::LOW, $this->str('failing', $a), [], $failing)->with_link($this->get_fix_url());
+            return finding::fail(severity::LOW, $this->summary('failing', $a), [], $failing)->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok', $a));
+        return finding::pass($this->summary('ok', $a));
     }
 }

@@ -56,11 +56,11 @@ class forcehttps extends base {
     public function evaluate(run_context $context): finding {
         global $CFG;
         if (strpos($CFG->wwwroot, 'https://') !== 0) {
-            return finding::fail(severity::HIGH, $this->str('fail'));
+            return finding::fail(severity::HIGH, $this->summary('fail'));
         }
         if (empty($CFG->cookiesecure)) {
-            return finding::fail(severity::MEDIUM, $this->str('cookiesecure'))->with_link($this->get_fix_url());
+            return finding::fail(severity::MEDIUM, $this->summary('cookiesecure'))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok'));
+        return finding::pass($this->summary('ok'));
     }
 }

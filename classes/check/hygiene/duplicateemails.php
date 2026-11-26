@@ -63,14 +63,14 @@ class duplicateemails extends base {
               ORDER BY COUNT(1) DESC";
         $rows = $DB->get_records_sql($sql, ['mnethostid' => $CFG->mnet_localhost_id]);
         if (!$rows) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $sample = [];
         foreach ($rows as $row) {
             $sample[] = ['label' => $row->email . ' (' . $row->accounts . ')', 'url' => null];
         }
         $severity = !empty($CFG->authloginviaemail) ? severity::MEDIUM : severity::LOW;
-        return finding::fail($severity, $this->str('fail', count($rows)), [], count($rows))
+        return finding::fail($severity, $this->summary('fail', count($rows)), [], count($rows))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

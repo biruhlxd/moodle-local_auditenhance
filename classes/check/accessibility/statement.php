@@ -49,12 +49,12 @@ class statement extends base {
      */
     public function evaluate(run_context $context): finding {
         if (trim((string)get_config('local_auditenhance', 'accessibilitystatementurl')) !== '') {
-            return finding::pass($this->str('configured'));
+            return finding::pass($this->summary('configured'));
         }
         if ($this->find_statement()) {
-            return finding::pass($this->str('found'));
+            return finding::pass($this->summary('found'));
         }
-        return finding::fail(severity::LOW, $this->str('fail'))->with_link($this->get_fix_url());
+        return finding::fail(severity::LOW, $this->summary('fail'))->with_link($this->get_fix_url());
     }
 
     /**

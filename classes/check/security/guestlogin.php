@@ -56,12 +56,12 @@ class guestlogin extends base {
     public function evaluate(run_context $context): finding {
         global $CFG;
         if (!empty($CFG->autologinguests)) {
-            return finding::fail(severity::MEDIUM, $this->str('autologin'))
+            return finding::fail(severity::MEDIUM, $this->summary('autologin'))
                 ->with_link(new \moodle_url('/admin/settings.php', ['section' => 'sitepolicies']));
         }
         if (!empty($CFG->guestloginbutton)) {
-            return finding::fail(severity::LOW, $this->str('button'))->with_link($this->get_fix_url());
+            return finding::fail(severity::LOW, $this->summary('button'))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok'));
+        return finding::pass($this->summary('ok'));
     }
 }
