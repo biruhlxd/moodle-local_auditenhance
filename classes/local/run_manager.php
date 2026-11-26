@@ -295,6 +295,10 @@ final class run_manager {
                     $finding = finding::error($e->getMessage());
                 }
             }
+            $muted = $context->count_muted_items($ref);
+            if ($muted) {
+                $finding->details['muteditems'] = $muted;
+            }
             self::save_result($run, $check, $finding);
             $context->set_finding($ref, $finding);
             $done[$ref] = true;
