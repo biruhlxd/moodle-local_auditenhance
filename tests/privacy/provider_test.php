@@ -67,7 +67,7 @@ final class provider_test extends provider_testcase {
      */
     public function test_get_metadata(): void {
         $collection = provider::get_metadata(new \core_privacy\local\metadata\collection('local_auditenhance'));
-        $this->assertCount(3, $collection->get_collection());
+        $this->assertCount(4, $collection->get_collection());
     }
 
     /**
