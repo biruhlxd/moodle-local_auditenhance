@@ -48,11 +48,11 @@ class htmllang extends base {
         global $CFG;
         $lang = (string)($CFG->lang ?? '');
         if ($lang === '' || !get_string_manager()->translation_exists($lang, false)) {
-            return finding::fail(severity::MEDIUM, $this->str('notinstalled', $lang))->with_link($this->get_fix_url());
+            return finding::fail(severity::MEDIUM, $this->summary('notinstalled', $lang))->with_link($this->get_fix_url());
         }
         if (strpos(get_html_lang(), 'lang=') === false) {
-            return finding::fail(severity::MEDIUM, $this->str('fail'))->with_link($this->get_fix_url());
+            return finding::fail(severity::MEDIUM, $this->summary('fail'))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok', $lang));
+        return finding::pass($this->summary('ok', $lang));
     }
 }

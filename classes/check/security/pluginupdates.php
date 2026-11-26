@@ -47,11 +47,11 @@ class pluginupdates extends base {
     public function evaluate(run_context $context): finding {
         $checker = \core\update\checker::instance();
         if (!$checker->enabled()) {
-            return finding::fail(severity::INFO, $this->str('disabled'))
+            return finding::fail(severity::INFO, $this->summary('disabled'))
                 ->with_link(new \moodle_url('/admin/settings.php', ['section' => 'updatenotifications']));
         }
         if (!$checker->get_last_timefetched()) {
-            return finding::fail(severity::INFO, $this->str('notfetched'))->with_link($this->get_fix_url());
+            return finding::fail(severity::INFO, $this->summary('notfetched'))->with_link($this->get_fix_url());
         }
         $sample = [];
         foreach (\core_plugin_manager::instance()->get_plugins() as $plugins) {
@@ -70,9 +70,9 @@ class pluginupdates extends base {
             }
         }
         if (!$sample) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
-        return finding::fail(severity::MEDIUM, $this->str('fail', count($sample)), [], count($sample))
+        return finding::fail(severity::MEDIUM, $this->summary('fail', count($sample)), [], count($sample))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

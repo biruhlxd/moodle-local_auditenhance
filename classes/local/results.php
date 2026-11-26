@@ -106,7 +106,7 @@ final class results {
                 $findings[$ref] = new finding(
                     $data['status'],
                     $data['severity'],
-                    $data['summary'],
+                    $data['summaryref'] ?? $data['summary'],
                     $data['details'],
                     $data['link'],
                     $data['itemcount']

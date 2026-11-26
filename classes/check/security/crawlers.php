@@ -57,11 +57,11 @@ class crawlers extends base {
     public function evaluate(run_context $context): finding {
         global $CFG;
         if (empty($CFG->opentowebcrawlers)) {
-            return finding::pass($this->str('off'));
+            return finding::pass($this->summary('off'));
         }
         if (site_info::is_private()) {
-            return finding::fail(severity::HIGH, $this->str('fail'))->with_link($this->get_fix_url());
+            return finding::fail(severity::HIGH, $this->summary('fail'))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('public'));
+        return finding::pass($this->summary('public'));
     }
 }

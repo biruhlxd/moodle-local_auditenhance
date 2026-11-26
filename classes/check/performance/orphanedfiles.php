@@ -53,9 +53,9 @@ class orphanedfiles extends base {
         $record = $DB->get_record_sql($sql);
         $count = (int)($record->files ?? 0);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $a = (object)['count' => $count, 'size' => display_size((int)$record->bytes)];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $count);
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $count);
     }
 }

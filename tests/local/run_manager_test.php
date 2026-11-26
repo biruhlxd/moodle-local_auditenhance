@@ -32,6 +32,7 @@ require_once(__DIR__ . '/../fixtures/test_registry_helper.php');
 #[\PHPUnit\Framework\Attributes\CoversClass(results::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(finding::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(item::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(summary::class)]
 final class run_manager_test extends \advanced_testcase {
     use \local_auditenhance\test_registry_helper;
 
@@ -200,6 +201,53 @@ final class run_manager_test extends \advanced_testcase {
         }
         $this->assertEquals(2, $DB->count_records('local_auditenhance_run'));
         $this->assertEquals(20, $DB->count_records('local_auditenhance_item'));
+    }
+
+    /**
+     * Items are kept for the latest runs only; results stay.
+     */
+    public function test_cleanup_items(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->make_test_registry(false);
+        set_config('keepitemruns', 1, 'local_auditenhance');
+        $runids = [];
+        for ($i = 0; $i < 3; $i++) {
+            $run = run_manager::create_run(null, 'test');
+            run_manager::execute((int)$run->id);
+            $runids[] = (int)$run->id;
+        }
+        $this->assertEquals(10, $DB->count_records('local_auditenhance_item'));
+        $this->assertEquals(10, $DB->count_records('local_auditenhance_item', ['runid' => end($runids)]));
+        $this->assertEquals(9, $DB->count_records('local_auditenhance_result'));
+    }
+
+    /**
+     * Summaries given as language string references are translated when read back.
+     */
+    public function test_summary_reference(): void {
+        $summary = new summary('check_imagealt_fail', 'local_auditenhance', 3);
+        $finding = finding::fail(severity::MEDIUM, $summary);
+        $this->assertSame(get_string('check_imagealt_fail', 'local_auditenhance', 3), $finding->summary);
+        $record = (object)['status' => $finding->status, 'severity' => $finding->severity, 'summary' => 'Stored text',
+            'details' => $finding->encode_details(), 'itemcount' => 0];
+        $copy = finding::from_record($record);
+        $this->assertSame($finding->summary, $copy->summary);
+        $this->assertSame('check_imagealt_fail', $copy->summaryref->identifier);
+        $this->assertArrayNotHasKey('_str', $copy->details);
+
+        // Object parameters survive storage.
+        $finding = finding::fail(severity::LOW, new summary(
+            'check_largefiles_fail',
+            'local_auditenhance',
+            (object)['count' => 2, 'size' => '1MB']
+        ));
+        $record->details = $finding->encode_details();
+        $this->assertStringContainsString('1MB', finding::from_record($record)->summary);
+
+        // A string that no longer exists falls back to the stored text.
+        $record->details = json_encode(['_str' => ['identifier' => 'nosuchstring', 'component' => 'local_auditenhance']]);
+        $this->assertSame('Stored text', finding::from_record($record)->summary);
     }
 
     /**

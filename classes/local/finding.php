@@ -36,12 +36,18 @@ class finding {
     /** @var int Maximum number of sample entries kept in the details. */
     public const MAX_SAMPLE = 10;
 
+    /** @var string Summary in the current language. */
+    public string $summary;
+
+    /** @var summary|null Language string behind the summary, when known. */
+    public ?summary $summaryref = null;
+
     /**
      * Constructor.
      *
      * @param string $status One of the STATUS_ constants.
      * @param string $severity One of the severity constants. Only meaningful for failures.
-     * @param string $summary Short plain text summary.
+     * @param string|summary $summary Short plain text summary, or a language string reference (translated when shown).
      * @param array $details Extra data: 'sample' holds a list of ['label' => string, 'url' => string|null].
      * @param string|null $link URL of the setting or content to fix.
      * @param int $itemcount Number of items behind this finding.
@@ -51,8 +57,7 @@ class finding {
         public string $status,
         /** @var string Severity. */
         public string $severity = severity::INFO,
-        /** @var string Summary. */
-        public string $summary = '',
+        string|summary $summary = '',
         /** @var array Details. */
         public array $details = [],
         /** @var string|null Link. */
@@ -63,16 +68,22 @@ class finding {
         if (!severity::is_valid($this->severity)) {
             $this->severity = severity::INFO;
         }
+        if ($summary instanceof summary) {
+            $this->summaryref = $summary;
+            $this->summary = $summary->out();
+        } else {
+            $this->summary = $summary;
+        }
     }
 
     /**
      * A passing finding.
      *
-     * @param string $summary
+     * @param string|summary $summary
      * @param array $details
      * @return self
      */
-    public static function pass(string $summary, array $details = []): self {
+    public static function pass(string|summary $summary, array $details = []): self {
         return new self(self::STATUS_PASS, severity::INFO, $summary, $details);
     }
 
@@ -80,32 +91,32 @@ class finding {
      * A failing finding.
      *
      * @param string $severity
-     * @param string $summary
+     * @param string|summary $summary
      * @param array $details
      * @param int $itemcount
      * @return self
      */
-    public static function fail(string $severity, string $summary, array $details = [], int $itemcount = 0): self {
+    public static function fail(string $severity, string|summary $summary, array $details = [], int $itemcount = 0): self {
         return new self(self::STATUS_FAIL, $severity, $summary, $details, null, $itemcount);
     }
 
     /**
      * A finding for a check that does not apply.
      *
-     * @param string $summary
+     * @param string|summary $summary
      * @return self
      */
-    public static function skip(string $summary): self {
+    public static function skip(string|summary $summary): self {
         return new self(self::STATUS_SKIP, severity::INFO, $summary);
     }
 
     /**
      * A finding for a check that could not run.
      *
-     * @param string $summary
+     * @param string|summary $summary
      * @return self
      */
-    public static function error(string $summary): self {
+    public static function error(string|summary $summary): self {
         return new self(self::STATUS_ERROR, severity::INFO, $summary);
     }
 
@@ -169,11 +180,12 @@ class finding {
             $details = [];
         }
         $link = $details['_link'] ?? null;
-        unset($details['_link']);
+        $ref = summary::from_array($details['_str'] ?? null);
+        unset($details['_link'], $details['_str']);
         return new self(
             $record->status,
             $record->severity,
-            (string)$record->summary,
+            $ref ?? (string)$record->summary,
             $details,
             $link,
             (int)$record->itemcount
@@ -189,6 +201,9 @@ class finding {
         $details = $this->details;
         if ($this->link !== null) {
             $details['_link'] = $this->link;
+        }
+        if ($this->summaryref !== null) {
+            $details['_str'] = $this->summaryref->to_array();
         }
         return json_encode($details);
     }

@@ -56,7 +56,7 @@ class selfregistration extends base {
     public function evaluate(run_context $context): finding {
         global $CFG;
         if (empty($CFG->registerauth) || !is_enabled_auth($CFG->registerauth)) {
-            return finding::pass($this->str('off'));
+            return finding::pass($this->summary('off'));
         }
         $problems = [];
         $captcha = !empty($CFG->recaptchapublickey) && !empty($CFG->recaptchaprivatekey)
@@ -68,9 +68,9 @@ class selfregistration extends base {
             $problems[] = $this->str('nodomains');
         }
         if (!$problems) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $severity = count($problems) > 1 ? severity::HIGH : severity::LOW;
-        return finding::fail($severity, $this->str('fail') . ' ' . implode(' ', $problems))->with_link($this->get_fix_url());
+        return finding::fail($severity, $this->summary('fail') . ' ' . implode(' ', $problems))->with_link($this->get_fix_url());
     }
 }

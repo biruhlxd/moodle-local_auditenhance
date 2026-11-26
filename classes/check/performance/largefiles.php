@@ -51,7 +51,7 @@ class largefiles extends base {
         $select = "filesize > :limit AND filename <> '.'";
         $count = $DB->count_records_select('files', $select, ['limit' => $limit]);
         if (!$count) {
-            return finding::pass($this->str('ok', display_size($limit)));
+            return finding::pass($this->summary('ok', display_size($limit)));
         }
         $sample = [];
         $files = $DB->get_records_select(
@@ -69,6 +69,6 @@ class largefiles extends base {
                 'url' => $context ? $context->get_url() : null];
         }
         $a = (object)['count' => $count, 'size' => display_size($limit)];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $count)->with_sample($sample);
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $count)->with_sample($sample);
     }
 }

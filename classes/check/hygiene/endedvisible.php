@@ -52,11 +52,11 @@ class endedvisible extends base {
         $params = ['siteid' => SITEID, 'cutoff' => time() - $days * DAYSECS];
         $count = $DB->count_records_select('course', $select, $params);
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $courses = $DB->get_records_select('course', $select, $params, 'enddate', 'id, fullname', 0, 10);
         $a = (object)['count' => $count, 'days' => $days];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $count)
             ->with_sample(emptycourses::course_sample($courses))
             ->with_link($this->get_fix_url());
     }

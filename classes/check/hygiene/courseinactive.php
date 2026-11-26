@@ -65,11 +65,11 @@ class courseinactive extends base {
         $params = ['siteid' => SITEID, 'cutoff1' => $cutoff, 'cutoff2' => $cutoff];
         $count = (int)$DB->count_records_sql("SELECT COUNT(1) $from", $params);
         if (!$count) {
-            return finding::pass($this->str('ok', $months));
+            return finding::pass($this->summary('ok', $months));
         }
         $courses = $DB->get_records_sql("SELECT c.id, c.fullname $from ORDER BY c.id", $params, 0, 10);
         $a = (object)['count' => $count, 'months' => $months];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $count)
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $count)
             ->with_sample(emptycourses::course_sample($courses))
             ->with_link($this->get_fix_url());
     }

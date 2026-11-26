@@ -84,7 +84,7 @@ class documents extends base {
         $select = "f.mimetype $mimesql AND f.component $compsql AND f.filearea $areasql AND f.filename <> '.'";
         $total = $DB->count_records_sql("SELECT COUNT(1) FROM {files} f WHERE $select", $params);
         if (!$total) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $max = (int)$context->get_config('maxitems', 5000);
         $rs = $DB->get_recordset_sql("SELECT f.id, f.contextid, f.component, f.filearea, f.itemid, f.filename, f.userid
@@ -117,7 +117,8 @@ class documents extends base {
         $rs->close();
         $finding = $this->finding_from_items($context);
         $finding->itemcount = (int)$total;
-        $finding->summary = $this->str('fail', $total);
+        $finding->summaryref = $this->summary('fail', $total);
+        $finding->summary = $finding->summaryref->out();
         return $finding;
     }
 }

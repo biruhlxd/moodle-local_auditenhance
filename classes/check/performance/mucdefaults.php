@@ -52,9 +52,9 @@ class mucdefaults extends base {
         $stores = array_keys(\core_cache\config::instance()->get_all_stores());
         $custom = array_diff($stores, self::DEFAULT_STORES);
         if ($custom) {
-            return finding::pass($this->str('ok', count($custom)));
+            return finding::pass($this->summary('ok', count($custom)));
         }
         $severity = site_info::is_large() ? severity::MEDIUM : severity::LOW;
-        return finding::fail($severity, $this->str('fail'))->with_link($this->get_fix_url());
+        return finding::fail($severity, $this->summary('fail'))->with_link($this->get_fix_url());
     }
 }

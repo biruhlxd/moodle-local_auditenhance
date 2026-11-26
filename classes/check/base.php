@@ -235,6 +235,17 @@ abstract class base extends \core\check\check {
     }
 
     /**
+     * Summary of this check (string check_<id>_<suffix>), kept as a reference so it is translated when shown.
+     *
+     * @param string $suffix
+     * @param mixed $a
+     * @return \local_auditenhance\local\summary
+     */
+    protected function summary(string $suffix, $a = null): \local_auditenhance\local\summary {
+        return new \local_auditenhance\local\summary('check_' . $this->get_id() . '_' . $suffix, $this->get_component(), $a);
+    }
+
+    /**
      * Finding built from the items recorded for this check.
      *
      * Passes when there are no items, fails with the highest item severity otherwise.
@@ -247,7 +258,7 @@ abstract class base extends \core\check\check {
         $ref = $this->get_ref();
         $count = $context->count_items($ref);
         if ($count === 0) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $severity = $context->get_max_item_severity($ref) ?? $this->get_default_severity();
         $sample = [];
@@ -255,7 +266,7 @@ abstract class base extends \core\check\check {
             $detail = json_decode($record->detail ?? '', true) ?: [];
             $sample[] = ['label' => $detail['label'] ?? $record->issue, 'url' => $detail['url'] ?? null];
         }
-        return finding::fail($severity, $this->str('fail', $count), [], $count)
+        return finding::fail($severity, $this->summary('fail', $count), [], $count)
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

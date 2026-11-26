@@ -69,9 +69,9 @@ class largecourses extends base {
                 'url' => new \moodle_url('/course/view.php', ['id' => $course->id])];
         }
         if (!$over) {
-            return finding::pass($this->str('ok', display_size($limit)))->with_sample($sample);
+            return finding::pass($this->summary('ok', display_size($limit)))->with_sample($sample);
         }
         $a = (object)['count' => $over, 'size' => display_size($limit)];
-        return finding::fail(severity::LOW, $this->str('fail', $a), [], $over)->with_sample($sample);
+        return finding::fail(severity::LOW, $this->summary('fail', $a), [], $over)->with_sample($sample);
     }
 }

@@ -48,12 +48,12 @@ class sessionhandler extends base {
      */
     public function evaluate(run_context $context): finding {
         if (site_info::session_handler() !== 'core\session\database') {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
         $a = (object)['users' => site_info::active_users(), 'threshold' => settings::threshold('largesiteusers')];
         if (!site_info::is_large()) {
-            return finding::pass($this->str('small', $a));
+            return finding::pass($this->summary('small', $a));
         }
-        return finding::fail(severity::MEDIUM, $this->str('fail', $a))->with_link($this->get_fix_url());
+        return finding::fail(severity::MEDIUM, $this->summary('fail', $a))->with_link($this->get_fix_url());
     }
 }

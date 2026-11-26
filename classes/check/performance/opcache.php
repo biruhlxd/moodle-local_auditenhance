@@ -60,7 +60,7 @@ class opcache extends base {
         if (CLI_SCRIPT) {
             $known = get_config('local_auditenhance', 'webopcache');
             if ($known === false || $known === '') {
-                return finding::skip($this->str('cli'));
+                return finding::skip($this->summary('cli'));
             }
             $enabled = (bool)$known;
         } else {
@@ -70,9 +70,9 @@ class opcache extends base {
             }
         }
         if ($enabled) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
-        return finding::fail(severity::HIGH, $this->str('fail'))->with_link($this->get_fix_url());
+        return finding::fail(severity::HIGH, $this->summary('fail'))->with_link($this->get_fix_url());
     }
 
     /**

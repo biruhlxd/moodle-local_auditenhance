@@ -1,5 +1,15 @@
 # Changes
 
+## 1.0.1 (2026-11-27)
+
+- Finding summaries are stored as language string references and shown in the reader's language. Summaries stored
+  by 1.0.0 still show as they were.
+- Count messages read correctly for any number ("Images without useful alternative text: 1").
+- New setting "Runs with item details" (default 5): individual items are kept for the latest runs of each area only.
+  Scores and findings of older runs stay for the history.
+- Runs stuck in the queue are now marked failed even when "Runs to keep" is 0.
+- Test fixture plugins with deliberately unsafe code are stored as .php.txt files and copied when the tests run.
+
 ## 1.0.0 (2026-11-27)
 
 First stable release.

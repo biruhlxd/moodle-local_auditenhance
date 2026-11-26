@@ -58,7 +58,7 @@ class riskycaps extends base {
         global $DB;
         $roleids = capability_helper::everyone_role_ids();
         if (!$roleids) {
-            return finding::skip($this->str('noroles'));
+            return finding::skip($this->summary('noroles'));
         }
         [$insql, $params] = $DB->get_in_or_equal($roleids, SQL_PARAMS_NAMED);
         $sql = "SELECT rc.id, rc.roleid, rc.capability, c.riskbitmask, r.archetype, r.shortname, r.name
@@ -93,9 +93,9 @@ class riskycaps extends base {
             ];
         }
         if (!$count) {
-            return finding::pass($this->str('ok'));
+            return finding::pass($this->summary('ok'));
         }
-        return finding::fail($worst, $this->str('fail', $count), [], $count)
+        return finding::fail($worst, $this->summary('fail', $count), [], $count)
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

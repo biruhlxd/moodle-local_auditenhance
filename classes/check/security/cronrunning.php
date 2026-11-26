@@ -58,17 +58,17 @@ class cronrunning extends base {
         global $CFG;
         $lastcron = (int)get_config('tool_task', 'lastcronstart');
         if (!$lastcron) {
-            return finding::fail(severity::CRITICAL, $this->str('never'))->with_link($this->get_fix_url());
+            return finding::fail(severity::CRITICAL, $this->summary('never'))->with_link($this->get_fix_url());
         }
         $delta = max(0, time() - $lastcron);
         $expected = (int)($CFG->expectedcronfrequency ?? MINSECS);
         $late = settings::threshold('cronlateminutes') * MINSECS;
         if ($delta > DAYSECS) {
-            return finding::fail(severity::CRITICAL, $this->str('fail', format_time($delta)))->with_link($this->get_fix_url());
+            return finding::fail(severity::CRITICAL, $this->summary('fail', format_time($delta)))->with_link($this->get_fix_url());
         }
         if ($delta > $expected + $late) {
-            return finding::fail(severity::HIGH, $this->str('fail', format_time($delta)))->with_link($this->get_fix_url());
+            return finding::fail(severity::HIGH, $this->summary('fail', format_time($delta)))->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str('ok', format_time($delta)));
+        return finding::pass($this->summary('ok', format_time($delta)));
     }
 }

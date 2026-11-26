@@ -55,7 +55,7 @@ class adminlogin extends base {
             }
         }
         if (!$stale) {
-            return finding::pass($this->str('ok', $days));
+            return finding::pass($this->summary('ok', $days));
         }
         $sample = [];
         foreach ($stale as $admin) {
@@ -65,7 +65,7 @@ class adminlogin extends base {
                 'url' => new \moodle_url('/user/profile.php', ['id' => $admin->id])];
         }
         $a = (object)['count' => count($stale), 'days' => $days];
-        return finding::fail(severity::MEDIUM, $this->str('fail', $a), [], count($stale))
+        return finding::fail(severity::MEDIUM, $this->summary('fail', $a), [], count($stale))
             ->with_sample($sample)
             ->with_link($this->get_fix_url());
     }

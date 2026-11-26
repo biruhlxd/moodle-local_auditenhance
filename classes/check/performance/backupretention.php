@@ -57,12 +57,12 @@ class backupretention extends base {
                                            AND timecreated < :cutoff", ['cutoff' => time() - $days * DAYSECS]);
         $oldcount = (int)($old->files ?? 0);
         if ($active && $maxkept === 0 && $deletedays === 0) {
-            return finding::fail(severity::MEDIUM, $this->str('unlimited'), [], $oldcount)->with_link($this->get_fix_url());
+            return finding::fail(severity::MEDIUM, $this->summary('unlimited'), [], $oldcount)->with_link($this->get_fix_url());
         }
         if ($oldcount) {
             $a = (object)['count' => $oldcount, 'days' => $days, 'size' => display_size((int)$old->bytes)];
-            return finding::fail(severity::LOW, $this->str('old', $a), [], $oldcount)->with_link($this->get_fix_url());
+            return finding::fail(severity::LOW, $this->summary('old', $a), [], $oldcount)->with_link($this->get_fix_url());
         }
-        return finding::pass($this->str($active ? 'ok' : 'inactive'));
+        return finding::pass($this->summary($active ? 'ok' : 'inactive'));
     }
 }
