@@ -1,5 +1,11 @@
 # Changes
 
+## 1.2.2 (2026-11-26)
+
+- Plugin risk: file paths are shown with forward slashes on Windows servers too (they started with a backslash),
+  so findings and skipped third-party folders match.
+- Test for unused add-ons no longer assumes a site with only standard plugins.
+
 ## 1.2.1 (2026-12-02)
 
 - "Fix this" is only shown on failed findings, not on passed or skipped ones.
