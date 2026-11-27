@@ -1,5 +1,11 @@
 # Changes
 
+## 1.2.3 (2026-11-27)
+
+- Area pages and the other screens keep Site administration > Reports selected in the menu and show the full
+  breadcrumb (the menu fell back to Home).
+- Downloads set the page context, so no debugging notice ends up in the file.
+
 ## 1.2.2 (2026-11-26)
 
 - Plugin risk: file paths are shown with forward slashes on Windows servers too (they started with a backslash),

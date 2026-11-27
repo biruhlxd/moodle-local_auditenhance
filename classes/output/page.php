@@ -48,6 +48,8 @@ class page {
         global $CFG, $PAGE;
         require_once($CFG->libdir . '/adminlib.php');
         admin_externalpage_setup('local_auditenhance_overview', '', null, $url, ['pagelayout' => 'report']);
+        // Every screen belongs to the overview's admin page, so the admin menu and breadcrumb stay on it.
+        \navigation_node::override_active_url(new \moodle_url('/local/auditenhance/index.php'));
         require_capability($capability, \context_system::instance());
         $PAGE->set_url($url);
         $PAGE->set_title($title);

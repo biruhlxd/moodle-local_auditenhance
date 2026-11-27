@@ -34,6 +34,8 @@ $runid = required_param('runid', PARAM_INT);
 require_login(null, false);
 require_sesskey();
 $context = context_system::instance();
+$PAGE->set_context($context);
+$PAGE->set_url(new moodle_url('/local/auditenhance/export.php', ['format' => $formatid, 'scope' => $scope, 'runid' => $runid]));
 require_capability('local/auditenhance:view', $context);
 
 $format = registry::instance()->get_export_format($formatid);
